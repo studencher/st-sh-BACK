@@ -1,0 +1,5 @@
+config/
+node_modules/
+/src/studentcher-shared-utils/
+package-lock.json
+.env

@@ -1,0 +1,1 @@
+{"version":3,"file":"ServiceResponse.js","sourceRoot":"","sources":["../../../../../studentcher-backend-shared-utils/src/models/ServiceResponse.ts"],"names":[],"mappings":";;;AAEA,MAAa,eAAe;IAIxB,YAAY,QAAyB,EAAE,GAAW;QAC9C,IAAI,QAAQ,EAAE;YACV,IAAI,CAAC,QAAQ,GAAG,QAAQ,CAAC;SAC5B;QACD,IAAI,GAAG,EAAE;YACL,IAAI,CAAC,GAAG,GAAG,GAAG,CAAC;SAClB;IACL,CAAC;CACJ;AAZD,0CAYC"}
