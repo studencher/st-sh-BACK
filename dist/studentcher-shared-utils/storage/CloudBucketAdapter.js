@@ -387,10 +387,9 @@ class CloudBucketAdapter {
         const params = {
             Bucket: bucketName,
             Key: `${folderName}/`,
-            Body: '',
         };
         try {
-            await this.s3ClientV2.upload(params).promise();
+            await this.s3ClientV2.putObject(params).promise();
             console.log(`Folder "${folderName}" created successfully in bucket "${bucketName}".`);
             return { response: new ApiResponse_1.ApiResponse(true, {}) };
         }
