@@ -121,8 +121,7 @@ class UsersService {
                 const videoData = privateZoneData.currentActivity.videos[i];
                 const { response, err } =
                   await this.cloudService.generatePreSignUrl({
-                    directory: videoData.srcUrl,
-                    fileName: videoData.fileName,
+                    fileName: videoData.srcUrl,
                     action:
                       Constants_1.Constants
                         .CLOUD_STORAGE_PRE_SIGNED_URL_READ_ACTION,
