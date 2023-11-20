@@ -20,8 +20,8 @@ function getInsertActivityQuery() {
 }
 exports.getInsertActivityQuery = getInsertActivityQuery;
 function getInsertVideoQuery() {
-    return `insert into activity_videos ( activity_id, index, title, file_name ) VALUES ( $1, $2, $3, $4 )
-            RETURNING activity_id as "activityId", index, title, file_name as "fileName"`;
+    return `insert into activity_videos ( activity_id, index, title, file_name, src_url) VALUES ( $1, $2, $3, $4,$5 )
+            RETURNING activity_id as "activityId", index, title, file_name as "fileName",src_url as "srcUrl"`;
 }
 exports.getInsertVideoQuery = getInsertVideoQuery;
 function getUpdateActivityQuery() {
