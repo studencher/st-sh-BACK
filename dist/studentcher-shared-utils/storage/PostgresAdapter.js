@@ -6,7 +6,7 @@ Object.defineProperty(exports, "__esModule", { value: true });
 exports.userActivityTracker = exports.PgClient = exports.PostgresAdapter = void 0;
 const pg_1 = __importDefault(require("pg"));
 class PostgresAdapter {
-    constructor({ host, database, user, password, max = 25, min = 4, connectionTimeoutMillis = 10000 }) {
+    constructor({ host, database, user, password, max = 25, min = 4, connectionTimeoutMillis = 10000, ssl }) {
         this.pgPool = new pg_1.default.Pool({ host, database, user, password, max, min, connectionTimeoutMillis });
     }
     async callDbCmd(sqlQuery, values = []) {
@@ -84,7 +84,10 @@ const PgClient = new PostgresAdapter({
     password: process.env.DB_PASSWORD || "",
     max: 25,
     min: 4,
-    connectionTimeoutMillis: 10000
+    connectionTimeoutMillis: 10000,
+    ssl: {
+        rejectUnauthorized: false
+    }
 });
 exports.PgClient = PgClient;
 const userActivityTracker = async (req, res, next) => {

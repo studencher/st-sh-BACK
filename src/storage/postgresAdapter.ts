@@ -8,7 +8,11 @@ const pgClient = new PostgresAdapter({
     password: process.env.DB_PASSWORD,
     max: 25,
     min: 4,
-    connectionTimeoutMillis: 10000
+    connectionTimeoutMillis: 10000,
+     ssl :{
+        rejectUnauthorized: false
+
+     }
 })
 
 export default pgClient;

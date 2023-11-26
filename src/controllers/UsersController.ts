@@ -1,6 +1,7 @@
 import { NextFunction, Request, Response } from 'express';
 import {IUsersService} from "../studentcher-shared-utils/services/UsersService";
 import usersService from "../services/UsersService";
+import DiscordService from '../services/DiscordService';
 
 class UsersController {
     usersService: IUsersService
@@ -118,6 +119,14 @@ class UsersController {
             isCompleted: req.body.isCompleted
         }
         const {err, response} = await this.usersService.addUserActivityVideoStatus(requestData)
+        if(err != null)
+            return next(err)
+        res.status(200).send(response);
+    }
+
+    getUserLastDiscordTrack = async(req: Request, res: Response, next: NextFunction) => {
+        
+        const {err, response} = await DiscordService.getUserLastDiscordTrack()
         if(err != null)
             return next(err)
         res.status(200).send(response);

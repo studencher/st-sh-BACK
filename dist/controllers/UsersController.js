@@ -4,6 +4,7 @@ var __importDefault = (this && this.__importDefault) || function (mod) {
 };
 Object.defineProperty(exports, "__esModule", { value: true });
 const UsersService_1 = __importDefault(require("../services/UsersService"));
+const DiscordService_1 = __importDefault(require("../services/DiscordService"));
 class UsersController {
     constructor(usersService) {
         this.getUsers = async (req, res, next) => {
@@ -115,6 +116,12 @@ class UsersController {
                 isCompleted: req.body.isCompleted
             };
             const { err, response } = await this.usersService.addUserActivityVideoStatus(requestData);
+            if (err != null)
+                return next(err);
+            res.status(200).send(response);
+        };
+        this.getUserLastDiscordTrack = async (req, res, next) => {
+            const { err, response } = await DiscordService_1.default.getUserLastDiscordTrack();
             if (err != null)
                 return next(err);
             res.status(200).send(response);

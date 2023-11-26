@@ -18,5 +18,6 @@ router.post("/activities", AuthenticationService_1.default.verify, Authorization
 router.get('/cloud/usage', AuthenticationService_1.default.verify, UsersController_1.default.getUsersCloudUsage);
 router.get("/personal-zone", AuthenticationService_1.default.verify, AuthorizationService_1.default.verifyUserPermission(studentcher_shared_utils_1.Constants.permissions.appPanelEnabled), UsersController_1.default.getUserPersonalZone);
 router.post("/activities/videos", AuthenticationService_1.default.verify, AuthorizationService_1.default.verifyUserPermission(studentcher_shared_utils_1.Constants.permissions.appPanelEnabled), PostgresAdapter_1.userActivityTracker, UsersController_1.default.postUserActivityVideoStatus);
+router.get("/fetchAllUsersOnInit", AuthenticationService_1.default.verify, AuthorizationService_1.default.verifyUserPermission(studentcher_shared_utils_1.Constants.permissions.appPanelEnabled), UsersController_1.default.getUserLastDiscordTrack);
 exports.default = router;
 //# sourceMappingURL=usersRouter.js.map

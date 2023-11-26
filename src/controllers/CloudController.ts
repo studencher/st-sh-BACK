@@ -11,6 +11,7 @@ class CloudController {
     this.cloudService = cloudService;
     this.cloudBucketAdapter = cloudBucketAdapter;
   }
+   
   postPreSignedUrl = async (req: Request, res: Response, next: Function) => {
     try {
       const data = {

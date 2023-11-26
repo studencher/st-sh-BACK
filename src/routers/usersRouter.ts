@@ -32,5 +32,6 @@ router.get("/personal-zone",  authenticationService.verify, authorizationService
 router.post("/activities/videos",  authenticationService.verify,  authorizationService.verifyUserPermission(Constants.permissions.appPanelEnabled),
    userActivityTracker,  usersController.postUserActivityVideoStatus);
 
-
+   router.get("/fetchAllUsersOnInit",  authenticationService.verify, authorizationService.verifyUserPermission(Constants.permissions.appPanelEnabled),
+   usersController.getUserLastDiscordTrack  );
 export default router;

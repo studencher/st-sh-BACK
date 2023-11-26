@@ -119,10 +119,7 @@ class UsersService {
             const signedVideos = [];
             for (let i = 0; i < totalVideos; i++) {
                 const videoData = privateZoneData.currentActivity.videos[i];
-                const { response, err } = await this.cloudService.generatePreSignUrl({
-                    fileName: videoData.fileName,
-                    action: Constants_1.Constants.CLOUD_STORAGE_PRE_SIGNED_URL_READ_ACTION,
-                });
+                const { response, err } = await this.cloudService.generatePreSignUrl({ fileName: videoData.fileName, action: Constants_1.Constants.CLOUD_STORAGE_PRE_SIGNED_URL_READ_ACTION });
                 if (err != null)
                     return { err };
                 delete videoData.fileName;

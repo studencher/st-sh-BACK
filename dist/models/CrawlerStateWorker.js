@@ -12,4 +12,5 @@ exports.default = new CrawlerStateWorker_1.CrawlerStateWorker({
     redisClient: RedisAdapter_1.default,
     crawlerService: CrawlersService_1.default
 });
+// hi!
 //# sourceMappingURL=CrawlerStateWorker.js.map

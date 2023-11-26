@@ -9,8 +9,9 @@
     "start": "tsc && node dist/index.js",
     "dev": "tsc-watch --onSuccess \"node ./dist/index.js\"",
     "dev-env": "tsc-watch --onSuccess \"env-cmd -f ./.env node ./dist/index.js\"",
+ 
     "dev-inspect": "tsc-watch --onSuccess \"env-cmd -f ./.env node --inspect ./dist/index.js\"",
-    "link-utils": "cp -R ../studentcher-backend-shared-utils/src/* ./src/studentcher-shared-utils/ ",
+    "link-utils": "cp -R ../studentcher-shared-utils/src/* ./src/studentcher-shared-utils/ ",
     "link-utils-win": "xcopy /E ..\\studentcher-backend-shared-utils-main\\src\\* .\\src\\studentcher-shared-utils\\ "
   },
   "author": "",

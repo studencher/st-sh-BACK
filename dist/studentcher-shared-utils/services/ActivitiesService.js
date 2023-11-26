@@ -49,7 +49,7 @@ class ActivitiesService {
     static validatedActivityFields(data) {
         if (data.videos != null) {
             data.videos.forEach((video) => {
-                const { result, message } = Validations_1.Validations.areFieldsProvided(['title', 'fileName'], video);
+                const { result, message } = Validations_1.Validations.areFieldsProvided(["title", "fileName"], video);
                 if (!result)
                     throw new CustomError_1.CustomError(message);
             });
@@ -66,31 +66,25 @@ class ActivitiesService {
         ActivitiesService.validatedActivityFields(data);
         if (!Array.isArray(data.videos))
             return;
-        // const fileNamesVerifications = data.videos.map(({ fileName }) =>
-        //   this.authorizationService.verifyAccessToFileOnCloud(fileName)
-        // );
-        const fileNamesVerifications = data.videos.map(({ srcUrl }) => this.authorizationService.verifyAccessToFileOnCloud(srcUrl));
+        const fileNamesVerifications = data.videos.map(({ fileName }) => this.authorizationService.verifyAccessToFileOnCloud(fileName));
         await Promise.all(fileNamesVerifications);
     }
     async addActivity(data) {
         try {
-            const { result, message } = Validations_1.Validations.areFieldsProvided(['name', 'videos'], data);
+            const { result, message } = Validations_1.Validations.areFieldsProvided(["name", "videos"], data);
             if (!result)
                 return { err: new CustomError_1.CustomError(message) };
             await this.validatedActivityFields(data);
             data.activityId = ActivitiesService.idGenerator();
-            // data.responsibleRoleId = ;
             const activity = await this.activitiesRepository.addOne(data);
             return { response: new ApiResponse_1.ApiResponse(true, { activity }) };
         }
         catch (err) {
             switch (err.constraint) {
-                case 'activities_name_key':
-                    return {
-                        err: new CustomError_1.CustomError('Name already taken and must be unique'),
-                    };
-                case 'activities_created_by_fkey':
-                    return { err: new CustomError_1.CustomError('User id is invalid') };
+                case "activities_name_key":
+                    return { err: new CustomError_1.CustomError("Name already taken and must be unique") };
+                case "activities_created_by_fkey":
+                    return { err: new CustomError_1.CustomError("User id is invalid") };
                 default:
                     return { err };
             }
@@ -106,16 +100,12 @@ class ActivitiesService {
         }
         catch (err) {
             switch (err.constraint) {
-                case 'activities_name_key':
-                    return {
-                        err: new CustomError_1.CustomError('Name already taken and must be unique'),
-                    };
-                case 'activities_created_by_fkey':
-                    return { err: new CustomError_1.CustomError('User id is invalid') };
-                case 'activity_videos_src_url_check':
-                    return {
-                        err: new CustomError_1.CustomError("One of the activities' src url is invalid"),
-                    };
+                case "activities_name_key":
+                    return { err: new CustomError_1.CustomError("Name already taken and must be unique") };
+                case "activities_created_by_fkey":
+                    return { err: new CustomError_1.CustomError("User id is invalid") };
+                case "activity_videos_src_url_check":
+                    return { err: new CustomError_1.CustomError("One of the activities' src url is invalid") };
                 default:
                     return { err };
             }
@@ -142,14 +132,10 @@ class ActivitiesService {
             return { response: new ApiResponse_1.ApiResponse(true, {}) };
         }
         catch (err) {
-            if (err.constraint === 'activity_user_meta_data')
-                return {
-                    err: new Error("Invalid data provided - (user's id, plan's id, activity's id, index) is not mention in User's activity history"),
-                };
-            if (err.constraint === 'user_activity_meta_data_meta_data_check')
-                return {
-                    err: new CustomError_1.CustomError("Invalid data for activity's meta data."),
-                };
+            if (err.constraint === "activity_user_meta_data")
+                return { err: new Error("Invalid data provided - (user's id, plan's id, activity's id, index) is not mention in User's activity history") };
+            if (err.constraint === "user_activity_meta_data_meta_data_check")
+                return { err: new CustomError_1.CustomError("Invalid data for activity's meta data.") };
             return { err };
         }
     }
