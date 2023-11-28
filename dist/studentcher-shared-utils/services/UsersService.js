@@ -70,7 +70,7 @@ class UsersService {
     }
     async addUser(data) {
         try {
-            const { result, message } = Validations_1.Validations.areFieldsProvided(["password", "name", "roleId", "discordUserId"], data);
+            const { result, message } = Validations_1.Validations.areFieldsProvided(['password', 'name', 'roleId', 'discordUserId'], data);
             if (!result)
                 return { err: new CustomError_1.CustomError(message) };
             UsersService.validateUserFields(data);
@@ -79,8 +79,10 @@ class UsersService {
             return { response: new ApiResponse_1.ApiResponse(true, { user }) };
         }
         catch (err) {
-            if (err.constraint === "users_pkey")
-                return { err: new CustomError_1.CustomError("Email already registered in the system.") };
+            if (err.constraint === 'users_pkey')
+                return {
+                    err: new CustomError_1.CustomError('Email already registered in the system.'),
+                };
             return { err };
         }
     }
@@ -103,7 +105,7 @@ class UsersService {
             if (data.userIds.length === 0)
                 return { err: new CustomError_1.CustomError("Users' ids must be provided") };
             if (data.userIds.includes(data.id))
-                return { err: new CustomError_1.CustomError("User cannot delete itself") };
+                return { err: new CustomError_1.CustomError('User cannot delete itself') };
             const users = await this.userRepository.deleteMany(data);
             return { response: new ApiResponse_1.ApiResponse(true, { users }) };
         }
@@ -115,18 +117,26 @@ class UsersService {
         var _a;
         try {
             const privateZoneData = await this.userRepository.getPrivateZone(data);
-            const totalVideos = ((_a = privateZoneData === null || privateZoneData === void 0 ? void 0 : privateZoneData.currentActivity) === null || _a === void 0 ? void 0 : _a.videos.length) || 0;
-            const signedVideos = [];
-            for (let i = 0; i < totalVideos; i++) {
-                const videoData = privateZoneData.currentActivity.videos[i];
-                const { response, err } = await this.cloudService.generatePreSignUrl({ fileName: videoData.fileName, action: Constants_1.Constants.CLOUD_STORAGE_PRE_SIGNED_URL_READ_ACTION });
-                if (err != null)
-                    return { err };
-                delete videoData.fileName;
-                signedVideos.push(Object.assign(Object.assign({}, videoData), { srcUrl: response.data.preSignedUrl }));
+            const totalActivities = ((_a = privateZoneData === null || privateZoneData === void 0 ? void 0 : privateZoneData.allActivities) === null || _a === void 0 ? void 0 : _a.length) || 0;
+            for (let activityIndex = 0; activityIndex < totalActivities; activityIndex++) {
+                const totalVideos = (privateZoneData === null || privateZoneData === void 0 ? void 0 : privateZoneData.allActivities[activityIndex].videos.length) || 0;
+                const signedVideos = [];
+                for (let i = 0; i < totalVideos; i++) {
+                    const videoData = privateZoneData.allActivities[activityIndex].videos[i];
+                    const { response, err } = await this.cloudService.generatePreSignUrl({
+                        fileName: videoData.fileName,
+                        action: Constants_1.Constants.CLOUD_STORAGE_PRE_SIGNED_URL_READ_ACTION,
+                    });
+                    if (err != null)
+                        return { err };
+                    delete videoData.fileName;
+                    signedVideos.push(Object.assign(Object.assign({}, videoData), { srcUrl: response.data.preSignedUrl }));
+                }
+                privateZoneData.allActivities[activityIndex] = Object.assign(Object.assign({}, privateZoneData.allActivities[activityIndex]), { videos: signedVideos });
             }
-            privateZoneData.currentActivity = Object.assign(Object.assign({}, privateZoneData.currentActivity), { videos: signedVideos });
-            return { response: new ApiResponse_1.ApiResponse(true, { privateZone: privateZoneData }) };
+            return {
+                response: new ApiResponse_1.ApiResponse(true, { privateZone: privateZoneData }),
+            };
         }
         catch (err) {
             return { err };
@@ -134,29 +144,33 @@ class UsersService {
     }
     async addUserActivity(data) {
         try {
-            const { result, message } = Validations_1.Validations.areFieldsProvided(["userId", "planId", "activityId"], data);
+            const { result, message } = Validations_1.Validations.areFieldsProvided(['userId', 'planId', 'activityId'], data);
             if (!result)
                 return { err: new CustomError_1.CustomError(message) };
             await this.userRepository.addUserActivity(data);
             return { response: new ApiResponse_1.ApiResponse(true, {}) };
         }
         catch (err) {
-            if (err.constraint === "user_activity_history_pkey")
-                return { err: new CustomError_1.CustomError("(user_id, plan_id, activity_id) already monitored in the system") };
+            if (err.constraint === 'user_activity_history_pkey')
+                return {
+                    err: new CustomError_1.CustomError('(user_id, plan_id, activity_id) already monitored in the system'),
+                };
             return { err };
         }
     }
     async addUserActivityVideoStatus(data) {
         try {
-            const { result, message } = Validations_1.Validations.areFieldsProvided(["userId", "planId", "activityId", "videoIndex"], data);
+            const { result, message } = Validations_1.Validations.areFieldsProvided(['userId', 'planId', 'activityId', 'videoIndex'], data);
             if (!result)
                 return { err: new CustomError_1.CustomError(message) };
             const userActivityVideoStatus = await this.userRepository.addUserActivityVideo(data);
             return { response: new ApiResponse_1.ApiResponse(true, { userActivityVideoStatus }) };
         }
         catch (err) {
-            if (err.constraint === "user_activity_history_pkey")
-                return { err: new CustomError_1.CustomError("(user_id, plan_id, activity_id) already monitored in the system") };
+            if (err.constraint === 'user_activity_history_pkey')
+                return {
+                    err: new CustomError_1.CustomError('(user_id, plan_id, activity_id) already monitored in the system'),
+                };
             return { err };
         }
     }
@@ -171,7 +185,7 @@ class UsersService {
                 }
                 eventsByUserActivity[key].push({
                     type: metaData.type,
-                    timestamp
+                    timestamp,
                 });
             }
         }
@@ -196,7 +210,7 @@ class UsersService {
             if (usersUsageIndex[userId] == null)
                 usersUsageIndex[userId] = {
                     userPlayDuration: 0,
-                    userEventsNum: 0
+                    userEventsNum: 0,
                 };
             usersUsageIndex[userId].userPlayDuration += userPlayDuration;
             usersUsageIndex[userId].userEventsNum += userEventsCounter;
@@ -210,7 +224,9 @@ class UsersService {
         const { usersUsageIndex, allUsersTotalDuration, allUsersEventsCounter } = this.analyzeAndExtractUsersEvents(usersEventsIndex);
         for (const userId in usersUsageIndex) {
             const { userPlayDuration, userEventsNum } = usersUsageIndex[userId];
-            const playPercentage = allUsersTotalDuration ? userPlayDuration / allUsersTotalDuration : 0;
+            const playPercentage = allUsersTotalDuration
+                ? userPlayDuration / allUsersTotalDuration
+                : 0;
             const userUsage = {
                 userId,
                 playPercentage,

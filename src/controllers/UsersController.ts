@@ -80,10 +80,10 @@ class UsersController {
     addUserActivity = async (req: Request, res: Response, next: NextFunction) => {
         try {
             const data = {
-                userId: req.body.userId,
-                planId: req.body.planId,
-                activityId: req.body.activityId,
-                isEnded: req.body.isEnded === true,
+              userId: res.locals.userId,
+              planId: req.body.planId,
+              activityId: req.body.activityId,
+              isEnded: req.body.isEnded === true,
             };
             const { err, response } = await this.usersService.addUserActivity(data);
             if (err != null) {
