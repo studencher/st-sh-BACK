@@ -60,9 +60,56 @@ export function getInsertUserPlansQuery(){
                  select unnest($2::text[]) as user_id ),
                registered_users as (
                  select array_agg(user_id) as list from user_plans where plan_id = $1 )
-              insert into user_plans (user_id, plan_id) 
-              select unu.user_id, $1 
+              insert into user_plans (user_id, plan_id)
+              select unu.user_id, $1
               from un_nested_users unu, registered_users ru
               where not unu.user_id = any(COALESCE(ru.list, array[]::text[]))
               RETURNING user_id as "userId";`;
 }
+
+// export function getInsertUserPlansQuery() {
+//   return ` with un_nested_users as (
+//                     select unnest($2::text[]) as user_id),
+//                 registered_users as (
+//                     select array_agg(user_id) as list from user_plans where plan_id = $1)
+//             delete from user_plans using (
+//                 select unu.user_id
+//                 from un_nested_users unu
+//                 left join registered_users ru on unu.user_id = any(ru.list)
+//                 where ru.list IS NULL) as to_delete
+//             where user_plans.user_id = to_delete.user_id and user_plans.plan_id = $1;
+
+//             insert into user_plans (user_id, plan_id)
+//             select unu.user_id, $1
+//             from un_nested_users unu
+//             left join registered_users ru on unu.user_id = any(ru.list)
+//             where ru.list IS NULL
+//             RETURNING user_id as "userId";`;
+// }
+
+// export function getInsertUserPlansQuery() {
+//   return `  WITH un_nested_users AS (
+//                 SELECT unnest($2::text[]) AS user_id
+//             ), registered_users AS (
+//                 SELECT user_id, array_agg(plan_id) AS plan_ids
+//                 FROM user_plans
+//                 GROUP BY user_id
+//             )
+//             DELETE FROM user_plans
+//             USING (
+//                 SELECT unu.user_id
+//                 FROM un_nested_users unu
+//                 LEFT JOIN registered_users ru ON unu.user_id = ru.user_id
+//                 WHERE ru.user_id IS NOT NULL AND $1 <> ALL(ru.plan_ids)
+//             ) AS to_delete
+//             WHERE user_plans.user_id = to_delete.user_id;
+
+//             INSERT INTO user_plans (user_id, plan_id)
+//             SELECT unu.user_id, $1
+//             FROM un_nested_users unu
+//             LEFT JOIN registered_users ru ON unu.user_id = ru.user_id
+//             WHERE ru.user_id IS NULL OR $1 <> ALL(ru.plan_ids)
+//             ON CONFLICT (user_id) DO UPDATE
+//             SET plan_id = EXCLUDED.plan_id
+//             RETURNING user_id AS "userId", plan_id AS "planId";`;
+// }
