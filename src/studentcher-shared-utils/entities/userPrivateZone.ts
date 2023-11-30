@@ -23,8 +23,9 @@ export interface IUserPrivateZoneBase{
     planeName: string,
     planId: string
 }
-export interface IUserPrivateZone extends IUserPrivateZoneBase{
-    currentActivity: IUserCurrentActivity
+export interface IUserPrivateZone extends IUserPrivateZoneBase {
+  currentActivity: IUserCurrentActivity;
+  allActivities: IUserCurrentActivity[];
 }
 
 export interface IUserPrivateZoneDTO extends IUserPrivateZoneBase{

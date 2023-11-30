@@ -95,6 +95,7 @@ CREATE TABLE activity_videos(
     index               INT NOT NULL,
     title               TEXT,
     file_name           TEXT,
+    src_url             TEXT,
     FOREIGN KEY (activity_id) REFERENCES activities (id)  ON DELETE CASCADE,
     PRIMARY KEY(activity_id, index),
     UNIQUE(activity_id, file_name)
@@ -107,7 +108,8 @@ with activity_video_data as (
                 select activity_id,
                 json_build_object(  'title', title,
                                     'index', index,
-                                    'fileName', file_name ) as video_data
+                                    'fileName', file_name, 
+                                    'srcUrl',src_url ) as video_data
                 from activity_videos )
 select activity_id, array_agg(video_data) as list
 from  activity_video_data
@@ -194,6 +196,7 @@ create or replace view user_current_activity as (
         from user_last_activity_meta_data_ts ula
         join user_activity_meta_data uam on ula.user_id = uam.user_id and ula.max_timestamp = uam.timestamp   )
     select umi.user_id, umi.plan_id, (max_index = array_length(list, 1) and  umi.ended_at  is not null) as is_plan_finished,
+    pal.list AS all_activities,
     CASE when  (umi.ended_at  is null or max_index = array_length(list, 1) ) then  list[max_index] else  list[max_index+1]  END as current_activity,
     json_build_object('index', COALESCE(ula.video_index, 1) - 1,
                       'timestamp', COALESCE(ula.timestamp, 0) ) as last_video_seen
@@ -487,6 +490,7 @@ CREATE OR REPLACE FUNCTION user_current_activity(P_USER_IDS TEXT[])
             user_id                   TEXT,
             plan_id                   UUID,
             is_plan_finished          BOOLEAN,
+            all_activities            JSON[],
             current_activity          JSON,
             last_video_seen_index     INT
     )
@@ -585,6 +589,7 @@ CREATE OR REPLACE FUNCTION user_current_activity(P_USER_IDS TEXT[])
                  join user_activity_meta_data uam on su.id = uam.user_id
                  order by su.id, uam.timestamp DESC )
           select umi.user_id, umi.plan_id, (max_index = array_length(user_plan_activities_list_data, 1) and  umi.ended_at  is not null) as is_plan_finished,
+          searched_users_plan_activities_data.user_plan_activities_list_data as all_activities,
           CASE when  (umi.ended_at  is null or max_index = array_length(user_plan_activities_list_data, 1) )
             then  user_plan_activities_list_data[max_index]
             else  user_plan_activities_list_data[max_index+1]

@@ -32,7 +32,13 @@ export class ActivitiesRepository extends EntityRepository{
         const insertVideoValuesBucket: any[] = [];
         data.videos.forEach((video, index)=>{
             insertVideoQueriesBucket.push(insertVideoQuery);
-            insertVideoValuesBucket.push([data.activityId, index + 1, video.title, video.fileName]);
+            insertVideoValuesBucket.push([
+              data.activityId,
+              index + 1,
+              video.title,
+              video.fileName,
+              video.srcUrl,
+            ]);
         })
         const sqlQueries: string[] = [insertActivityQuery, ...insertVideoQueriesBucket];
         const sqlValues: any[] = [insertActivityValues, ...insertVideoValuesBucket];
@@ -57,7 +63,13 @@ export class ActivitiesRepository extends EntityRepository{
         const insertVideoValuesBucket: any[] = [];
         data.videos.forEach((video, index)=>{
             insertVideoQueriesBucket.push(insertVideoQuery);
-            insertVideoValuesBucket.push([data.activityId, index + 1, video.title, video.fileName]);
+            insertVideoValuesBucket.push([
+              data.activityId,
+              index + 1,
+              video.title,
+              video.fileName,
+              video.srcUrl,
+            ]);
         })
         const sqlQueries: string[] = [updateActivityQuery,  deleteActivityVideosQuery, ...insertVideoQueriesBucket];
         const sqlValues: any[] = [ updateActivityValues, deleteActivityVideosValues, ...insertVideoValuesBucket];

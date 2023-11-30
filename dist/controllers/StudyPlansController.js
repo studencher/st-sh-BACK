@@ -37,7 +37,12 @@ class StudyPlansController {
                 const data = {
                     planId: req.body.id,
                     name: req.body.name,
-                    activityIds: Array.isArray(req.body.activityIds) ? req.body.activityIds : []
+                    activityIds: Array.isArray(req.body.activityIds)
+                        ? req.body.activityIds
+                        : [],
+                    users: Array.isArray(req.body.users)
+                        ? req.body.users
+                        : [],
                 };
                 const { err, response } = await this.studyPlansService.editStudyPlan(data);
                 if (err != null)

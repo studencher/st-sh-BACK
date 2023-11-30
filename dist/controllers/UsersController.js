@@ -79,7 +79,7 @@ class UsersController {
         this.addUserActivity = async (req, res, next) => {
             try {
                 const data = {
-                    userId: req.body.userId,
+                    userId: res.locals.userId,
                     planId: req.body.planId,
                     activityId: req.body.activityId,
                     isEnded: req.body.isEnded === true,

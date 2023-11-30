@@ -86,7 +86,7 @@ function getDeleteUsersQuery() {
 exports.getDeleteUsersQuery = getDeleteUsersQuery;
 function getSelectPersonalZoneQuery() {
     return `select u.id as "userId", u.name as "userName", r.name as "roleName", p.name as "planName", p.id as "planId",
-            current_activity as "currentActivity", is_plan_finished as "isPlanFinished", last_video_seen_index as "lastVideoSeenIndex"
+            all_activities as "allActivities", current_activity as "currentActivity", is_plan_finished as "isPlanFinished", last_video_seen_index as "lastVideoSeenIndex"
             from users u 
             join roles r on u.id = $1 and u.role_id = r.id
             left join user_current_activity(array[$1]) uca on u.id = uca.user_id  

@@ -66,7 +66,8 @@ class ActivitiesService {
         ActivitiesService.validatedActivityFields(data);
         if (!Array.isArray(data.videos))
             return;
-        const fileNamesVerifications = data.videos.map(({ fileName }) => this.authorizationService.verifyAccessToFileOnCloud(fileName));
+        // const fileNamesVerifications = data.videos.map(({fileName})=> this.authorizationService.verifyAccessToFileOnCloud(fileName));
+        const fileNamesVerifications = data.videos.map(({ srcUrl }) => this.authorizationService.verifyAccessToFileOnCloud(srcUrl));
         await Promise.all(fileNamesVerifications);
     }
     async addActivity(data) {

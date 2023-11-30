@@ -20,7 +20,7 @@ router.patch("/",  authenticationService.verify, authorizationService.verifyUser
 router.delete("/",  authenticationService.verify, authorizationService.verifyUserPermission(Constants.permissions.userManagement),
     userActivityTracker, usersController.deleteUsers);
 
-router.post("/activities",  authenticationService.verify, authorizationService.verifyUserPermission(Constants.permissions.userManagement),
+router.post("/activities",  authenticationService.verify, authorizationService.verifyUserPermission(Constants.permissions.activityTrackingEnabled),
     userActivityTracker, authorizationService.verifyAccessToRole(),  usersController.addUserActivity);
 
 router.get('/cloud/usage',  authenticationService.verify, usersController.getUsersCloudUsage)
