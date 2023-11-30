@@ -19,13 +19,20 @@ function getUpdateStudyPlanQuery() {
 exports.getUpdateStudyPlanQuery = getUpdateStudyPlanQuery;
 function getSelectStudyPlansQuery() {
     return `with plan_activities_list as (
-                select p.id, array_agg(activity_id) as activities 
-                from plans p 
-                join plan_activities pa on p.id = pa.plan_id
-                group by p.id)
-            select p.id, name,  COALESCE(activities, array[]::uuid[]) as activities 
+                    select p.id, array_agg(activity_id) as activities 
+                    from plans p 
+                    join plan_activities pa on p.id = pa.plan_id
+                    group by p.id),
+                user_activities_list as (
+                    select p.id, array_agg(user_id) as users
+                    from plans p
+                    join user_plans up on p.id = up.plan_id
+                    group by p.id) 
+            select p.id, name,  COALESCE(activities, array[]::uuid[]) as activities,
+            COALESCE(users, array[]::text[]) as users
             from plans p 
-            left join plan_activities_list pal on pal.id = p.id    `;
+            left join plan_activities_list pal on pal.id = p.id
+            left join user_activities_list ual on ual.id = p.id;`;
 }
 exports.getSelectStudyPlansQuery = getSelectStudyPlansQuery;
 function getDeleteStudyPlanActivitiesQuery() {
