@@ -66,20 +66,32 @@ export class StudyPlansRepository extends EntityRepository {
     const deletePlanActivitiesQuery: string =
       StudyPlansRepository.queries.getDeleteStudyPlanActivitiesQuery();
     const deletePlanActivitiesValues: any[] = [data.planId];
+    // const deletePlanActivitiesQuery1: string =
+    //   StudyPlansRepository.queries.getDeleteStudyPlanActivitiesQueryFromUserActivityVideoStatusHistory();
+    //   const deletePlanActivitiesValues1: any[] = [data.planId, data.activityIds];
+    //   const deletePlanActivitiesQuery2: string =
+    //     StudyPlansRepository.queries.getDeleteStudyPlanActivitiesQueryFromUserActivityMetaData();
+    //   const deletePlanActivitiesValues2: any[] = [data.planId, data.activityIds];
+    //   const deletePlanActivitiesQuery3: string =
+    //     StudyPlansRepository.queries.getDeleteStudyPlanActivitiesQueryFromUserActivityHistory();
+    //   const deletePlanActivitiesValues3: any[] = [data.planId, data.activityIds];
+    //   const deletePlanActivitiesQuery4: string =
+    //     StudyPlansRepository.queries.getDeleteStudyPlanActivitiesQueryFromPlanActivities();
+    //   const deletePlanActivitiesValues4: any[] = [data.planId, data.activityIds];
     const insertStudyPlanActivityQuery: string =
       StudyPlansRepository.queries.getInsertStudyPlanActivityQuery();
     const insertPlanActivitiesQueriesBucket: string[] = [];
     const insertPlanActivitiesValuesBucket: any[] = [];
 
-    // const insertStudyPlanUserQuery: string =
-    //   StudyPlansRepository.queries.getInsertUserPlansQuery();
-    // const insertPlanUsersValues: any[] = [data.planId, data.users];
-
-    const deleteUserPlansQuery: string =
-      StudyPlansRepository.queries.getDeleteUserPlansQuery();
-    const insertUserPlansQuery: string =
+    const insertStudyPlanUserQuery: string =
       StudyPlansRepository.queries.getInsertUserPlansQuery();
-    const values = [data.planId, [...data.users]];
+    const insertPlanUsersValues: any[] = [data.planId, data.users];
+
+    // const deleteUserPlansQuery: string =
+    //   StudyPlansRepository.queries.getDeleteUserPlansQuery();
+    // const insertUserPlansQuery: string =
+    //   StudyPlansRepository.queries.getInsertUserPlansQuery();
+    // const values = [data.planId, [...data.users]];
 
     data.activityIds.forEach((activityId, index) => {
       insertPlanActivitiesQueriesBucket.push(insertStudyPlanActivityQuery);
@@ -92,14 +104,22 @@ export class StudyPlansRepository extends EntityRepository {
     const sqlQueries = [
       updatePlanQuery,
       deletePlanActivitiesQuery,
+      //   deletePlanActivitiesQuery1,
+      //   deletePlanActivitiesQuery2,
+      //   deletePlanActivitiesQuery3,
+      //   deletePlanActivitiesQuery4,
       ...insertPlanActivitiesQueriesBucket,
-      insertUserPlansQuery,
+      insertStudyPlanUserQuery,
     ];
     const sqlValues = [
       updatePlanValues,
       deletePlanActivitiesValues,
+      //   deletePlanActivitiesValues1,
+      //   deletePlanActivitiesValues2,
+      //   deletePlanActivitiesValues3,
+      //   deletePlanActivitiesValues4,
       ...insertPlanActivitiesValuesBucket,
-      values,
+      insertPlanUsersValues,
     ];
     const response = await this.pgClient.callDbTransaction(
       sqlQueries,

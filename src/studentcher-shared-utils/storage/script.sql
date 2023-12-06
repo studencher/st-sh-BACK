@@ -96,6 +96,7 @@ CREATE TABLE activity_videos(
     title               TEXT,
     file_name           TEXT,
     src_url             TEXT,
+    duration            TEXT,
     FOREIGN KEY (activity_id) REFERENCES activities (id)  ON DELETE CASCADE,
     PRIMARY KEY(activity_id, index),
     UNIQUE(activity_id, file_name)
@@ -109,7 +110,8 @@ with activity_video_data as (
                 json_build_object(  'title', title,
                                     'index', index,
                                     'fileName', file_name, 
-                                    'srcUrl',src_url ) as video_data
+                                    'srcUrl',src_url,
+                                    'duration',duration ) as video_data
                 from activity_videos )
 select activity_id, array_agg(video_data) as list
 from  activity_video_data
@@ -548,7 +550,7 @@ CREATE OR REPLACE FUNCTION user_current_activity(P_USER_IDS TEXT[])
                     suavls.activity_id = uavs.activity_id and
                     suavls.video_index = uavs.video_index ),
           searched_users_activities_videos as (
-                   select su.id as user_id, up.plan_id, av.activity_id, av.index, av.title, av.file_name
+                   select su.id as user_id, up.plan_id, av.activity_id, av.index, av.title, av.file_name, av.duration
                    from searched_users su
                    join user_plans up on up.user_id = su.id
                    join plan_activities pa on pa.plan_id = up.plan_id
@@ -559,6 +561,7 @@ CREATE OR REPLACE FUNCTION user_current_activity(P_USER_IDS TEXT[])
                 array_agg(json_build_object(  'title', suav.title,
                                     'index', suav.index,
                                     'fileName', suav.file_name,
+                                    'duration' suav.duration,
                                     'isCompleted', COALESCE(suavls.is_completed, false),
                                     'lastStoppedAt', COALESCE(ulam.max_timestamp::float, 0))) as video_data_list
                 from searched_users_activities_videos suav

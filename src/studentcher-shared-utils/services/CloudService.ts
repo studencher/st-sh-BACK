@@ -64,7 +64,7 @@ export class CloudService implements ICloudService {
             ),
           };
 
-        data.fileName = `${
+        data.fileName = `${data.duration}-${
           data.fileName.split('.')[0]
         }_${CloudService.idGenerator()}.${fileExtension}`;
       }
