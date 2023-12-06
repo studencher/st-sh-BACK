@@ -126,6 +126,14 @@ class UsersController {
                 return next(err);
             res.status(200).send(response);
         };
+        this.fixUsersMissingDetails = async (req, res, next) => {
+            let obj = {};
+            const userDataString = req.query.userData;
+            obj = JSON.parse(userDataString);
+            //   const users = await this.usersService.fixUsersMissingDetails(obj)
+            //{userId: 'admin@hyperactive.co.il', discordChannelId: '1159445172518662184', status: 'active'}
+            res.status(200).send('users');
+        };
         this.usersService = usersService;
     }
 }
