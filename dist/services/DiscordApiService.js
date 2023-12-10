@@ -24,6 +24,12 @@ class DiscordApiService {
         const msg = new studentcher_shared_utils_1.BotInstructions(studentcher_shared_utils_1.Constants.CREATE_NEW_CHANNEL_MSG, { channelName });
         return this.sendMessage(msg);
     }
+    static async sendCreateChannelMsgAlt(data) {
+        const channelName = data.channelName;
+        const userId = data.userId;
+        const msg = new studentcher_shared_utils_1.BotInstructions(studentcher_shared_utils_1.Constants.CREATE_NEW_CHANNEL_MSG, { channelName, userId });
+        return this.sendMessage(msg);
+    }
     static async sendMoveMemberMsg(data) {
         const { usersTracking } = data;
         const { result, message } = studentcher_shared_utils_1.DiscordService.areUserTrackingInputsValid(usersTracking);

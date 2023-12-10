@@ -79,7 +79,10 @@ class MeetingsController {
         const {err, response} = await this.meetingsService.supervisorEnteringMeeting(requestData)
 }
 
-
+        sendChannelCreationMessagetoChat = async(req :Request, res :Response, next: NextFunction)=>{
+            console.log(req.body)
+            this.meetingsService.sendChannelCreationMessagetoChat(req.body.channelName,req.body.userId )
+        }
 
 }
 

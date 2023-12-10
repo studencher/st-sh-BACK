@@ -18,4 +18,7 @@ router.patch("/users",  authenticationService.verify, authorizationService.verif
 
 router.post("/supervisorEnteringMeeting",  authenticationService.verify, authorizationService.verifyUserPermission(Constants.permissions.appPanelEnabled), discordBotHealthCheck, userActivityTracker, meetingsController.supervisorEnteringMeeting);
 
+router.post("/sendChannelCreationMessagetoChat",  authenticationService.verify, authorizationService.verifyUserPermission(Constants.permissions.appPanelEnabled), discordBotHealthCheck, userActivityTracker, meetingsController.sendChannelCreationMessagetoChat);
+
+ 
 export default router;

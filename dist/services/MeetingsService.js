@@ -142,6 +142,11 @@ class MeetingsService {
         let data = { usersTracking: [sendMoveMemberMsgData] };
         await DiscordApiService_1.DiscordApiService.sendMoveMemberMsg(data);
     }
+    async sendChannelCreationMessagetoChat(channelName, userId, roleId) {
+        const { err: discordApiError } = await DiscordApiService_1.DiscordApiService.sendCreateChannelMsgAlt({ channelName, userId });
+        if (discordApiError)
+            return { err: discordApiError };
+    }
 }
 exports.MeetingsService = MeetingsService;
 MeetingsService.idGenerator = uuid.v1;

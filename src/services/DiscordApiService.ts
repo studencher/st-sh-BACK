@@ -21,6 +21,15 @@ export class DiscordApiService {
         return this.sendMessage(msg);
     }
 
+
+    static async sendCreateChannelMsgAlt(data: IClientRequestData) : Promise<ServiceResponse>{
+      
+        const  channelName  = data.channelName;
+        const userId = data.userId
+        const msg = new BotInstructions(Constants.CREATE_NEW_CHANNEL_MSG, { channelName,userId })
+        return this.sendMessage(msg);
+    }
+
     static async sendMoveMemberMsg(data: IClientRequestData){
         const { usersTracking } = data;
         const {result, message} = DiscordService.areUserTrackingInputsValid(usersTracking)

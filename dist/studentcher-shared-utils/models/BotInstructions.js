@@ -2,9 +2,10 @@
 Object.defineProperty(exports, "__esModule", { value: true });
 exports.BotInstructions = void 0;
 class BotInstructions {
-    constructor(type, data = {}) {
+    constructor(type, data = {}, userId) {
         this.type = type;
         this.data = data;
+        this.userId = userId;
     }
 }
 exports.BotInstructions = BotInstructions;

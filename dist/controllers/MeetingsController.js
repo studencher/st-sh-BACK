@@ -70,6 +70,10 @@ class MeetingsController {
             };
             const { err, response } = await this.meetingsService.supervisorEnteringMeeting(requestData);
         };
+        this.sendChannelCreationMessagetoChat = async (req, res, next) => {
+            console.log(req.body);
+            this.meetingsService.sendChannelCreationMessagetoChat(req.body.channelName, req.body.userId);
+        };
         this.meetingsService = meetingsService;
         this.discordService = discordService;
     }

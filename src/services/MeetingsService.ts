@@ -17,6 +17,7 @@ export interface IMeetingsService {
     editUserMeetings(data: IClientRequestData): Promise<ServiceResponse<ApiResponse<{userMeeting: IUserMeeting}>>>;
     addMeeting(data: IClientRequestData): Promise<ServiceResponse<ApiResponse<{meeting: IMeeting}>>>;
     endMeeting(data: IClientRequestData): Promise<ServiceResponse<ApiResponse<{meeting: IMeeting}>>>;
+    sendChannelCreationMessagetoChat: any
     supervisorEnteringMeeting : any
 
 }
@@ -140,6 +141,17 @@ export class MeetingsService implements IMeetingsService{
         let data =  {usersTracking : [sendMoveMemberMsgData]}
           await DiscordApiService.sendMoveMemberMsg(data);
 }
+
+async sendChannelCreationMessagetoChat(channelName, userId,roleId){
+    const {err: discordApiError} = await DiscordApiService.sendCreateChannelMsgAlt({channelName, userId});
+
+    if(discordApiError)
+        return {err: discordApiError};
+
+
+
+}
+
 
 }
 
