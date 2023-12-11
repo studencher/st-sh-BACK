@@ -6,6 +6,7 @@ export abstract class Constants {
     public static DISCORD_MEMBER_LEFT_STATUS : string = "left";
     public static CREATE_NEW_CHANNEL_MSG : string = "$create";
     public static MOVE_MEMBER_MSG : string = "$move";
+    public static DISCONNECT_MEMBER_MSG : string = "$disconnect";
 
     public static DISCORD_VOICE_CHANNEL_TYPE : string = "GuildVoice";
     public static DISCORD_VOICE_CHANNEL_INDEX_TYPE : number = 2;

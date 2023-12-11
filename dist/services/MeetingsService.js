@@ -147,6 +147,11 @@ class MeetingsService {
         if (discordApiError)
             return { err: discordApiError };
     }
+    async disconnectUserFromDiscord(data) {
+        const { err: discordApiError } = await DiscordApiService_1.DiscordApiService.sendDisconnectUserFromChannel(data);
+        if (discordApiError)
+            return { err: discordApiError };
+    }
 }
 exports.MeetingsService = MeetingsService;
 MeetingsService.idGenerator = uuid.v1;

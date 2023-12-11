@@ -131,6 +131,7 @@ class UsersController {
             return next(err)
         res.status(200).send(response);
     }
+
     fixUsersMissingDetails = async(req: Request, res: Response, next: NextFunction) => {
         let obj = {};
         const userDataString = req.query.userData as string;
@@ -142,6 +143,11 @@ class UsersController {
         res.status(200).send('users');
     }
 
+
+    
+
+
+     
      
 }
 

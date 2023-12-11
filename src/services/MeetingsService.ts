@@ -19,6 +19,7 @@ export interface IMeetingsService {
     endMeeting(data: IClientRequestData): Promise<ServiceResponse<ApiResponse<{meeting: IMeeting}>>>;
     sendChannelCreationMessagetoChat: any
     supervisorEnteringMeeting : any
+    disconnectUserFromDiscord: any
 
 }
 
@@ -147,11 +148,16 @@ async sendChannelCreationMessagetoChat(channelName, userId,roleId){
 
     if(discordApiError)
         return {err: discordApiError};
+}
+async disconnectUserFromDiscord(data){
+    const {err: discordApiError} = await DiscordApiService.sendDisconnectUserFromChannel( data );
 
-
-
+    if(discordApiError)
+        return {err: discordApiError};
 }
 
+
+ 
 
 }
 

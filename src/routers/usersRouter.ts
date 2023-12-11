@@ -38,4 +38,5 @@ router.post("/activities/videos",  authenticationService.verify,  authorizationS
    router.get("/fixUsersMissingDetails",  authenticationService.verify, authorizationService.verifyUserPermission(Constants.permissions.appPanelEnabled),
    usersController.fixUsersMissingDetails  );
 
+
  export default router;

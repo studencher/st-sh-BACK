@@ -29,6 +29,13 @@ export class DiscordApiService {
         const msg = new BotInstructions(Constants.CREATE_NEW_CHANNEL_MSG, { channelName,userId })
         return this.sendMessage(msg);
     }
+    static async sendDisconnectUserFromChannel(data: any) : Promise<ServiceResponse>{
+      
+         const userId = data.userId
+        const msg = new BotInstructions(Constants.DISCONNECT_MEMBER_MSG, { data})
+        return this.sendMessage(msg);
+    }
+
 
     static async sendMoveMemberMsg(data: IClientRequestData){
         const { usersTracking } = data;

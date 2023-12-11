@@ -11,6 +11,7 @@ Constants.DISCORD_MEMBER_BREAK_STATUS = "break";
 Constants.DISCORD_MEMBER_LEFT_STATUS = "left";
 Constants.CREATE_NEW_CHANNEL_MSG = "$create";
 Constants.MOVE_MEMBER_MSG = "$move";
+Constants.DISCONNECT_MEMBER_MSG = "$disconnect";
 Constants.DISCORD_VOICE_CHANNEL_TYPE = "GuildVoice";
 Constants.DISCORD_VOICE_CHANNEL_INDEX_TYPE = 2;
 Constants.AUTHENTICATION_FAILED_MESSAGE = "Access denied";

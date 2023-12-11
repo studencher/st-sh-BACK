@@ -74,6 +74,10 @@ class MeetingsController {
             console.log(req.body);
             this.meetingsService.sendChannelCreationMessagetoChat(req.body.channelName, req.body.userId);
         };
+        this.disconnectUserFromDiscord = async (req, res, next) => {
+            console.log(req.body);
+            this.meetingsService.disconnectUserFromDiscord(req.body);
+        };
         this.meetingsService = meetingsService;
         this.discordService = discordService;
     }

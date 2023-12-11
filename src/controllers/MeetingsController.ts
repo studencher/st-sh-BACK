@@ -84,6 +84,12 @@ class MeetingsController {
             this.meetingsService.sendChannelCreationMessagetoChat(req.body.channelName,req.body.userId )
         }
 
+        disconnectUserFromDiscord = async(req: Request, res: Response, next: NextFunction) => {
+            console.log(req.body)
+            this.meetingsService.disconnectUserFromDiscord(req.body )
+        }
+    
+
 }
 
 export default new MeetingsController(meetingsService, discordService);
