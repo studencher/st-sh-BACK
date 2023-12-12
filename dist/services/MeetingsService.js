@@ -87,20 +87,6 @@ class MeetingsService {
                     meetingId
                 };
             });
-            /*  [
-            {
-               discordChannelId: "1159445172518662184",
-               meetingId: "3a6eb880-8d32-11ee-90cf-87388948d11f",
-               status: "busy",
-               userId: "whiteWhale@hyperactive.co.il"
-             },
-             {
-               discordChannelId: "1159445172518662184",
-               meetingId: "3a6eb880-8d32-11ee-90cf-87388948d11f",
-               status: "busy",
-               userId: "dimitriy@hyperactive.co.il"
-             }
-           ]*/
             const sendMoveMemberMsgData = { usersTracking: usersTrackingBusy };
             this.logger.info(JSON.stringify(sendMoveMemberMsgData));
             const { err: discordApiError } = await DiscordApiService_1.DiscordApiService.sendMoveMemberMsg(sendMoveMemberMsgData);
@@ -151,6 +137,10 @@ class MeetingsService {
         const { err: discordApiError } = await DiscordApiService_1.DiscordApiService.sendDisconnectUserFromChannel(data);
         if (discordApiError)
             return { err: discordApiError };
+    }
+    async getMeetingId(userId) {
+        let res = await this.meetingsRepository.getMeetingId(userId);
+        return { response: new studentcher_shared_utils_1.ApiResponse(true, { res }) };
     }
 }
 exports.MeetingsService = MeetingsService;

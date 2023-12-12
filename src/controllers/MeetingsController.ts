@@ -80,14 +80,19 @@ class MeetingsController {
 }
 
         sendChannelCreationMessagetoChat = async(req :Request, res :Response, next: NextFunction)=>{
-            console.log(req.body)
-            this.meetingsService.sendChannelCreationMessagetoChat(req.body.channelName,req.body.userId )
+             this.meetingsService.sendChannelCreationMessagetoChat(req.body.channelName,req.body.userId )
         }
 
         disconnectUserFromDiscord = async(req: Request, res: Response, next: NextFunction) => {
-            console.log(req.body)
-            this.meetingsService.disconnectUserFromDiscord(req.body )
+             this.meetingsService.disconnectUserFromDiscord(req.body )
         }
+
+        getMeetingId = async(req: Request, res: Response, next: NextFunction) => {
+            let meetingId =  await this.meetingsService.getMeetingId(req.body.id )
+            return res.status(200).send({ data: meetingId });
+         }
+
+         
     
 
 }

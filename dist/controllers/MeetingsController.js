@@ -71,12 +71,14 @@ class MeetingsController {
             const { err, response } = await this.meetingsService.supervisorEnteringMeeting(requestData);
         };
         this.sendChannelCreationMessagetoChat = async (req, res, next) => {
-            console.log(req.body);
             this.meetingsService.sendChannelCreationMessagetoChat(req.body.channelName, req.body.userId);
         };
         this.disconnectUserFromDiscord = async (req, res, next) => {
-            console.log(req.body);
             this.meetingsService.disconnectUserFromDiscord(req.body);
+        };
+        this.getMeetingId = async (req, res, next) => {
+            let meetingId = await this.meetingsService.getMeetingId(req.body.id);
+            return res.status(200).send({ data: meetingId });
         };
         this.meetingsService = meetingsService;
         this.discordService = discordService;

@@ -23,5 +23,7 @@ router.post("/sendChannelCreationMessagetoChat",  authenticationService.verify, 
 router.post("/disconnectUserFromDiscord",  authenticationService.verify, authorizationService.verifyUserPermission(Constants.permissions.appPanelEnabled),
 meetingsController.disconnectUserFromDiscord  );
 
+router.post("/getMeetingId",  authenticationService.verify, authorizationService.verifyUserPermission(Constants.permissions.appPanelEnabled), discordBotHealthCheck, userActivityTracker, meetingsController.getMeetingId);
+
  
 export default router;

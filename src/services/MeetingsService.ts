@@ -20,6 +20,7 @@ export interface IMeetingsService {
     sendChannelCreationMessagetoChat: any
     supervisorEnteringMeeting : any
     disconnectUserFromDiscord: any
+    getMeetingId: any
 
 }
 
@@ -84,22 +85,7 @@ export class MeetingsService implements IMeetingsService{
                     meetingId
                 }
             })
-
-               /*  [
-               {
-                  discordChannelId: "1159445172518662184",
-                  meetingId: "3a6eb880-8d32-11ee-90cf-87388948d11f",
-                  status: "busy",
-                  userId: "whiteWhale@hyperactive.co.il"
-                },
-                {
-                  discordChannelId: "1159445172518662184",
-                  meetingId: "3a6eb880-8d32-11ee-90cf-87388948d11f",
-                  status: "busy",
-                  userId: "dimitriy@hyperactive.co.il"
-                }
-              ]*/
-
+ 
             const sendMoveMemberMsgData = {usersTracking: usersTrackingBusy};
             this.logger.info(JSON.stringify(sendMoveMemberMsgData));
             const {err: discordApiError} = await DiscordApiService.sendMoveMemberMsg(sendMoveMemberMsgData);
@@ -156,6 +142,14 @@ async disconnectUserFromDiscord(data){
         return {err: discordApiError};
 }
 
+async getMeetingId(userId){
+   let res =  await this.meetingsRepository.getMeetingId(userId)
+   return { response: new ApiResponse(true, {res}) }
+
+ }
+
+
+ 
 
  
 

@@ -18,5 +18,6 @@ router.patch("/users", AuthenticationService_1.default.verify, AuthorizationServ
 router.post("/supervisorEnteringMeeting", AuthenticationService_1.default.verify, AuthorizationService_1.default.verifyUserPermission(Constants_1.Constants.permissions.appPanelEnabled), discordBotHealthCheck_1.discordBotHealthCheck, PostgresAdapter_1.userActivityTracker, MeetingsController_1.default.supervisorEnteringMeeting);
 router.post("/sendChannelCreationMessagetoChat", AuthenticationService_1.default.verify, AuthorizationService_1.default.verifyUserPermission(Constants_1.Constants.permissions.appPanelEnabled), discordBotHealthCheck_1.discordBotHealthCheck, PostgresAdapter_1.userActivityTracker, MeetingsController_1.default.sendChannelCreationMessagetoChat);
 router.post("/disconnectUserFromDiscord", AuthenticationService_1.default.verify, AuthorizationService_1.default.verifyUserPermission(Constants_1.Constants.permissions.appPanelEnabled), MeetingsController_1.default.disconnectUserFromDiscord);
+router.post("/getMeetingId", AuthenticationService_1.default.verify, AuthorizationService_1.default.verifyUserPermission(Constants_1.Constants.permissions.appPanelEnabled), discordBotHealthCheck_1.discordBotHealthCheck, PostgresAdapter_1.userActivityTracker, MeetingsController_1.default.getMeetingId);
 exports.default = router;
 //# sourceMappingURL=meetingsRouter.js.map

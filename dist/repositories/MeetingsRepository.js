@@ -95,6 +95,14 @@ class MeetingsRepository extends studentcher_shared_utils_1.EntityRepository {
         const meeting_id = await this.dbClient.callDbCmd(query, values);
         return meeting_id;
     }
+    async getMeetingId(userId) {
+        //data.channel, data.supervisorId, data.loggedUsers[0].id, data.loggedUsers[1].id
+        const query = `SELECT * FROM  user_meetings where user_id = $1 order by created_at desc limit 1`;
+        const values = [userId];
+        let meeting_id = await this.dbClient.callDbCmd(query, values);
+        meeting_id = meeting_id.rows[0].meeting_id;
+        return meeting_id;
+    }
 }
 exports.MeetingsRepository = MeetingsRepository;
 exports.default = new MeetingsRepository(postgresAdapter_1.default);
