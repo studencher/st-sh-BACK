@@ -1,4 +1,4 @@
-import {CrawlersService} from "../studentcher-shared-utils/services/CrawlersService";
+/*import {CrawlersService} from "../studentcher-shared-utils/services/CrawlersService";
 import crawlersRepository from "../repositories/CrawlersRepository";
 
-export default new CrawlersService(crawlersRepository);
+export default new CrawlersService(crawlersRepository);*/

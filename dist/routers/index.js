@@ -17,7 +17,7 @@ const membersRouter_1 = __importDefault(require("./membersRouter"));
 const questionsRouter_1 = __importDefault(require("./questionsRouter"));
 const cloudRouter_1 = __importDefault(require("./cloudRouter"));
 const meetingsRouter_1 = __importDefault(require("./meetingsRouter"));
-const crawlersRouter_1 = __importDefault(require("./crawlersRouter"));
+//import crawlersRouter from "./crawlersRouter";
 // import fs from "fs";
 // import logger from "../utils/Logger";
 // import dotNetProjectTestsService from "../services/DotNetProjectTestsService";
@@ -38,6 +38,6 @@ routers.use("/members", membersRouter_1.default);
 routers.use("/meetings", meetingsRouter_1.default);
 routers.use("/questions", questionsRouter_1.default);
 routers.use("/cloud", cloudRouter_1.default);
-routers.use("/social-media-crawler", crawlersRouter_1.default);
+//routers.use("/social-media-crawler", crawlersRouter);
 exports.default = routers;
 //# sourceMappingURL=index.js.map

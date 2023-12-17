@@ -1,4 +1,4 @@
-import { Request, Response, NextFunction } from "express";
+/*import { Request, Response, NextFunction } from "express";
 import {Logger} from "../studentcher-shared-utils/helpers/Logger";
 import crawlersService from "../services/CrawlersService";
 import {ApiResponse} from "../studentcher-shared-utils";
@@ -144,4 +144,4 @@ class CrawlersController{
     }
 }
 
-export default new CrawlersController({logger: new Logger("CrawlersController"), crawlersService, crawlerStateWorker});
+export default new CrawlersController({logger: new Logger("CrawlersController"), crawlersService, crawlerStateWorker});*/

@@ -1,4 +1,4 @@
-import express from "express";
+/*import express from "express";
 import authorizationService from "../services/AuthorizationService";
 import {Constants} from "../studentcher-shared-utils/helpers/Constants";
 import authenticationService from "../services/AuthenticationService";
@@ -50,3 +50,4 @@ router.post("/status", authenticationService.verify, authorizationService.verify
 
 
 export default router;
+*/

@@ -12,7 +12,7 @@ import membersRouter from "./membersRouter";
 import questionsRouter from "./questionsRouter";
 import cloudRouter from "./cloudRouter";
 import meetingsRouter from "./meetingsRouter";
-import crawlersRouter from "./crawlersRouter";
+//import crawlersRouter from "./crawlersRouter";
 // import fs from "fs";
 // import logger from "../utils/Logger";
 // import dotNetProjectTestsService from "../services/DotNetProjectTestsService";
@@ -36,7 +36,7 @@ routers.use("/members", membersRouter);
 routers.use("/meetings", meetingsRouter);
 routers.use("/questions", questionsRouter);
 routers.use("/cloud", cloudRouter);
-routers.use("/social-media-crawler", crawlersRouter);
+//routers.use("/social-media-crawler", crawlersRouter);
 
 
 export default routers;

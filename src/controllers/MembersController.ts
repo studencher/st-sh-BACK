@@ -1,17 +1,14 @@
 import { NextFunction, Request, Response } from 'express';
 import {IDiscordService} from "../studentcher-shared-utils/services/DiscordService";
-import redisAdapter from "../helpers/RedisAdapter";
+//import redisAdapter from "../helpers/RedisAdapter";
 import {Constants} from "../studentcher-shared-utils/helpers/Constants";
-import {RedisAdapter} from "../studentcher-shared-utils/storage/RedisAdapter";
-import discordService from "../services/DiscordService";
+ import discordService from "../services/DiscordService";
 
 class MembersController {
     discordService: IDiscordService;
-    redisAdapter: RedisAdapter;
-    constructor(discordService, redisAdapter) {
+     constructor(discordService ) {
         this.discordService = discordService;
-        this.redisAdapter = redisAdapter;
-    }
+     }
     postMemberStatus = async(req :Request,res :Response, next: NextFunction)=>{
         const requestData = {
             discordChannelId: req.body.channelId,
@@ -24,7 +21,7 @@ class MembersController {
         res.status(200).send({ data: response });
         for (const userTrack of response.data.usersTracking) {
             const message = JSON.stringify({userTrack});
-            await this.redisAdapter.publish(Constants.STUDY_CHANNELS_SUBSCRIPTION, message);
+         //   await this.redisAdapter.publish(Constants.STUDY_CHANNELS_SUBSCRIPTION, message);
         }
     }
 
@@ -37,4 +34,4 @@ class MembersController {
 
 }
 
-export default new MembersController(discordService, redisAdapter)
+export default new MembersController(discordService )

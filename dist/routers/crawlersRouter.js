@@ -1,26 +1,54 @@
-"use strict";
-var __importDefault = (this && this.__importDefault) || function (mod) {
-    return (mod && mod.__esModule) ? mod : { "default": mod };
-};
-Object.defineProperty(exports, "__esModule", { value: true });
-const express_1 = __importDefault(require("express"));
-const AuthorizationService_1 = __importDefault(require("../services/AuthorizationService"));
-const Constants_1 = require("../studentcher-shared-utils/helpers/Constants");
-const AuthenticationService_1 = __importDefault(require("../services/AuthenticationService"));
-const CrawlersController_1 = __importDefault(require("../controllers/CrawlersController"));
-const router = express_1.default.Router();
-router.get("/comments", AuthenticationService_1.default.verify, AuthorizationService_1.default.verifyUserPermission(Constants_1.Constants.permissions.appPanelEnabled), CrawlersController_1.default.getComments);
-router.post('/comments', AuthenticationService_1.default.verify, AuthorizationService_1.default.verifyUserPermission(Constants_1.Constants.permissions.appPanelEnabled), CrawlersController_1.default.addComment);
-router.delete('/comments', AuthenticationService_1.default.verify, AuthorizationService_1.default.verifyUserPermission(Constants_1.Constants.permissions.appPanelEnabled), CrawlersController_1.default.deleteComments);
-router.get("/user-accounts", AuthenticationService_1.default.verify, AuthorizationService_1.default.verifyUserPermission(Constants_1.Constants.permissions.appPanelEnabled), CrawlersController_1.default.getUserAccounts);
-router.post("/user-accounts", AuthenticationService_1.default.verify, AuthorizationService_1.default.verifyUserPermission(Constants_1.Constants.permissions.appPanelEnabled), CrawlersController_1.default.addUserAccount);
-router.delete("/user-accounts", AuthenticationService_1.default.verify, AuthorizationService_1.default.verifyUserPermission(Constants_1.Constants.permissions.appPanelEnabled), CrawlersController_1.default.deleteUserAccounts);
-router.get("/searches", AuthenticationService_1.default.verify, AuthorizationService_1.default.verifyUserPermission(Constants_1.Constants.permissions.appPanelEnabled), CrawlersController_1.default.getSearches);
-router.post("/searches", AuthenticationService_1.default.verify, AuthorizationService_1.default.verifyUserPermission(Constants_1.Constants.permissions.appPanelEnabled), CrawlersController_1.default.addSearch);
-router.delete("/searches", AuthenticationService_1.default.verify, AuthorizationService_1.default.verifyUserPermission(Constants_1.Constants.permissions.appPanelEnabled), CrawlersController_1.default.deleteSearches);
-router.get("/", AuthenticationService_1.default.verify, AuthorizationService_1.default.verifyUserPermission(Constants_1.Constants.permissions.appPanelEnabled), CrawlersController_1.default.getCrawlers);
-router.post("/", AuthenticationService_1.default.verify, AuthorizationService_1.default.verifyUserPermission(Constants_1.Constants.permissions.appPanelEnabled), CrawlersController_1.default.addCrawler);
-router.delete("/", AuthenticationService_1.default.verify, AuthorizationService_1.default.verifyUserPermission(Constants_1.Constants.permissions.appPanelEnabled), CrawlersController_1.default.deleteCrawlers);
-router.post("/status", AuthenticationService_1.default.verify, AuthorizationService_1.default.verifyUserPermission(Constants_1.Constants.permissions.appPanelEnabled), CrawlersController_1.default.addCrawlerStatus);
-exports.default = router;
+/*import express from "express";
+import authorizationService from "../services/AuthorizationService";
+import {Constants} from "../studentcher-shared-utils/helpers/Constants";
+import authenticationService from "../services/AuthenticationService";
+import crawlersController from "../controllers/CrawlersController";
+
+
+const router = express.Router();
+
+router.get("/comments", authenticationService.verify, authorizationService.verifyUserPermission(Constants.permissions.appPanelEnabled),
+    crawlersController.getComments );
+
+router.post('/comments', authenticationService.verify,  authorizationService.verifyUserPermission(Constants.permissions.appPanelEnabled),
+    crawlersController.addComment) ;
+
+router.delete('/comments', authenticationService.verify,  authorizationService.verifyUserPermission(Constants.permissions.appPanelEnabled),
+    crawlersController.deleteComments) ;
+
+router.get("/user-accounts", authenticationService.verify, authorizationService.verifyUserPermission(Constants.permissions.appPanelEnabled),
+    crawlersController.getUserAccounts );
+
+router.post("/user-accounts", authenticationService.verify, authorizationService.verifyUserPermission(Constants.permissions.appPanelEnabled),
+    crawlersController.addUserAccount );
+
+router.delete("/user-accounts", authenticationService.verify, authorizationService.verifyUserPermission(Constants.permissions.appPanelEnabled),
+    crawlersController.deleteUserAccounts );
+
+router.get("/searches", authenticationService.verify, authorizationService.verifyUserPermission(Constants.permissions.appPanelEnabled),
+    crawlersController.getSearches );
+
+router.post("/searches", authenticationService.verify, authorizationService.verifyUserPermission(Constants.permissions.appPanelEnabled),
+    crawlersController.addSearch );
+
+router.delete("/searches", authenticationService.verify, authorizationService.verifyUserPermission(Constants.permissions.appPanelEnabled),
+    crawlersController.deleteSearches );
+
+
+router.get("/", authenticationService.verify, authorizationService.verifyUserPermission(Constants.permissions.appPanelEnabled),
+    crawlersController.getCrawlers );
+
+router.post("/", authenticationService.verify, authorizationService.verifyUserPermission(Constants.permissions.appPanelEnabled),
+    crawlersController.addCrawler );
+
+router.delete("/", authenticationService.verify, authorizationService.verifyUserPermission(Constants.permissions.appPanelEnabled),
+    crawlersController.deleteCrawlers );
+
+
+router.post("/status", authenticationService.verify, authorizationService.verifyUserPermission(Constants.permissions.appPanelEnabled),
+    crawlersController.addCrawlerStatus );
+
+
+export default router;
+*/ 
 //# sourceMappingURL=crawlersRouter.js.map
