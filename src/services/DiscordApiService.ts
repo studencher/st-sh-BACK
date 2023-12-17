@@ -39,10 +39,12 @@ export class DiscordApiService {
 
     static async sendMoveMemberMsg(data: IClientRequestData){
         const { usersTracking } = data;
+        const {isMeetingEnded} =data
+        
         const {result, message} = DiscordService.areUserTrackingInputsValid(usersTracking)
         if(!result)
             return {err: new CustomError(message)};
-        const msg = new BotInstructions("$move", { usersTracking })
+        const msg = new BotInstructions("$move", { usersTracking,isMeetingEnded })
         return this.sendMessage(msg);
     }
 

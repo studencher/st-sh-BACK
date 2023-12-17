@@ -102,7 +102,7 @@ class MeetingsService {
     }
     async endMeeting(data) {
         try {
-            const sendMoveMemberMsgData = { usersTracking: data.usersTracking };
+            const sendMoveMemberMsgData = { usersTracking: data.usersTracking, isMeetingEnded: data.isMeetingEnded };
             this.logger.info(JSON.stringify(sendMoveMemberMsgData));
             const { err: discordApiError } = await DiscordApiService_1.DiscordApiService.sendMoveMemberMsg(sendMoveMemberMsgData);
             if (discordApiError)

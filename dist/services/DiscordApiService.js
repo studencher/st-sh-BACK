@@ -37,10 +37,11 @@ class DiscordApiService {
     }
     static async sendMoveMemberMsg(data) {
         const { usersTracking } = data;
+        const { isMeetingEnded } = data;
         const { result, message } = studentcher_shared_utils_1.DiscordService.areUserTrackingInputsValid(usersTracking);
         if (!result)
             return { err: new studentcher_shared_utils_1.CustomError(message) };
-        const msg = new studentcher_shared_utils_1.BotInstructions("$move", { usersTracking });
+        const msg = new studentcher_shared_utils_1.BotInstructions("$move", { usersTracking, isMeetingEnded });
         return this.sendMessage(msg);
     }
     static async sendGeneralMsg(data) {

@@ -43,7 +43,7 @@ class MeetingsController {
             next();
         };
         this.endMeeting = async (req, res, next) => {
-            const requestData = { meetingId: req.body.meetingId, usersTracking: res.locals.usersTracking };
+            const requestData = { meetingId: req.body.meetingId, usersTracking: res.locals.usersTracking, isMeetingEnded: req.body.isMeetingEnded };
             const { err, response } = await this.meetingsService.endMeeting(requestData);
             if (err)
                 return next(err);

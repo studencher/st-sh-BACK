@@ -101,7 +101,7 @@ export class MeetingsService implements IMeetingsService{
 
     async endMeeting(data: IClientRequestData) :Promise<ServiceResponse> {
         try {
-            const sendMoveMemberMsgData = {usersTracking: data.usersTracking};
+            const sendMoveMemberMsgData = {usersTracking: data.usersTracking, isMeetingEnded:data.isMeetingEnded};
             this.logger.info(JSON.stringify(sendMoveMemberMsgData));
             const {err: discordApiError} = await DiscordApiService.sendMoveMemberMsg(sendMoveMemberMsgData);
             if(discordApiError)
