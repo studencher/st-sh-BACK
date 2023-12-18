@@ -3,9 +3,17 @@ export function getInsertStudyPlanQuery(){
             RETURNING id, name, extract(epoch from timestamp)::float as "createdAt", array[]::uuid[] as activities `
 }
 
-export function getInsertStudyPlanActivityQuery(){
-    return `insert into plan_activities (plan_id, activity_id, index) values ($1, $2, $3) 
-            RETURNING plan_id as "planId", activity_id as "activityId" , index `
+// export function getInsertStudyPlanActivityQuery(){
+//     return `insert into plan_activities (plan_id, activity_id, index) values ($1, $2, $3) 
+//             RETURNING plan_id as "planId", activity_id as "activityId" , index `
+// }
+export function getInsertStudyPlanActivityQuery() {
+  return `INSERT INTO plan_activities (plan_id, activity_id, index)
+VALUES ($1, $2, $3)
+ON CONFLICT (plan_id, activity_id)
+DO UPDATE SET index = $3
+RETURNING plan_id as "planId", activity_id as "activityId", index;
+`;
 }
 
 export function getUpdateStudyPlanQuery(){
@@ -41,9 +49,129 @@ export function getSelectStudyPlansQuery() {
             left join user_activities_list ual on ual.id = p.id;`;
 }
 
-export function getDeleteStudyPlanActivitiesQuery(){
-    return `delete from plan_activities 
-            where plan_id = $1`
+// export function getDeleteStudyPlanActivitiesQuery(){
+//     return `delete from plan_activities 
+//             where plan_id = $1`
+// }
+export function getDeleteStudyPlanActivitiesQueryFromUserActivityVideoStatusHistory() {
+  return `WITH activities_to_remove AS (
+    SELECT pa.plan_id, pa.activity_id
+    FROM plan_activities pa
+    WHERE pa.plan_id = $1 AND pa.activity_id = ANY($2::text[])
+),
+relevant_activities AS (
+    SELECT pa.plan_id, pa.activity_id, 'user_activity_video_status_history' AS table_name
+    FROM activities_to_remove pa
+    
+    UNION ALL
+    
+    SELECT pa.plan_id, pa.activity_id, 'user_activity_meta_data' AS table_name
+    FROM activities_to_remove pa
+    
+    UNION ALL
+    
+    SELECT pa.plan_id, pa.activity_id, 'user_activity_history' AS table_name
+    FROM activities_to_remove pa
+    
+    UNION ALL
+    
+    SELECT pa.plan_id, pa.activity_id, 'plan_activities' AS table_name
+    FROM activities_to_remove pa
+)
+DELETE FROM user_activity_video_status_history
+USING relevant_activities
+WHERE user_activity_video_status_history.plan_id = relevant_activities.plan_id
+  AND user_activity_video_status_history.activity_id = relevant_activities.activity_id;`;
+}
+export function getDeleteStudyPlanActivitiesQueryFromUserActivityMetaData() {
+  return `WITH activities_to_remove AS (
+    SELECT pa.plan_id, pa.activity_id
+    FROM plan_activities pa
+    WHERE pa.plan_id = $1 AND pa.activity_id = ANY($2::text[])
+),
+relevant_activities AS (
+    SELECT pa.plan_id, pa.activity_id, 'user_activity_video_status_history' AS table_name
+    FROM activities_to_remove pa
+    
+    UNION ALL
+    
+    SELECT pa.plan_id, pa.activity_id, 'user_activity_meta_data' AS table_name
+    FROM activities_to_remove pa
+    
+    UNION ALL
+    
+    SELECT pa.plan_id, pa.activity_id, 'user_activity_history' AS table_name
+    FROM activities_to_remove pa
+    
+    UNION ALL
+    
+    SELECT pa.plan_id, pa.activity_id, 'plan_activities' AS table_name
+    FROM activities_to_remove pa
+)
+DELETE FROM user_activity_meta_data
+USING relevant_activities
+WHERE user_activity_meta_data.plan_id = relevant_activities.plan_id
+  AND user_activity_meta_data.activity_id = relevant_activities.activity_id;`;
+}
+export function getDeleteStudyPlanActivitiesQueryFromUserActivityHistory() {
+  return `WITH activities_to_remove AS (
+    SELECT pa.plan_id, pa.activity_id
+    FROM plan_activities pa
+    WHERE pa.plan_id = $1 AND pa.activity_id = ANY($2::text[])
+),
+relevant_activities AS (
+    SELECT pa.plan_id, pa.activity_id, 'user_activity_video_status_history' AS table_name
+    FROM activities_to_remove pa
+    
+    UNION ALL
+    
+    SELECT pa.plan_id, pa.activity_id, 'user_activity_meta_data' AS table_name
+    FROM activities_to_remove pa
+    
+    UNION ALL
+    
+    SELECT pa.plan_id, pa.activity_id, 'user_activity_history' AS table_name
+    FROM activities_to_remove pa
+    
+    UNION ALL
+    
+    SELECT pa.plan_id, pa.activity_id, 'plan_activities' AS table_name
+    FROM activities_to_remove pa
+)
+DELETE FROM user_activity_history
+USING relevant_activities
+WHERE user_activity_history.plan_id = relevant_activities.plan_id
+  AND user_activity_history.activity_id = relevant_activities.activity_id;`;
+}
+export function getDeleteStudyPlanActivitiesQueryFromPlanActivities() {
+  return `WITH activities_to_remove AS (
+    SELECT pa.plan_id, pa.activity_id
+    FROM plan_activities pa
+    WHERE pa.plan_id = $1 AND pa.activity_id = ANY($2::text[])
+),
+relevant_activities AS (
+    SELECT pa.plan_id, pa.activity_id, 'user_activity_video_status_history' AS table_name
+    FROM activities_to_remove pa
+    
+    UNION ALL
+    
+    SELECT pa.plan_id, pa.activity_id, 'user_activity_meta_data' AS table_name
+    FROM activities_to_remove pa
+    
+    UNION ALL
+    
+    SELECT pa.plan_id, pa.activity_id, 'user_activity_history' AS table_name
+    FROM activities_to_remove pa
+    
+    UNION ALL
+    
+    SELECT pa.plan_id, pa.activity_id, 'plan_activities' AS table_name
+    FROM activities_to_remove pa
+)
+DELETE FROM plan_activities
+USING activities_to_remove
+WHERE plan_activities.plan_id = activities_to_remove.plan_id
+  AND plan_activities.activity_id = activities_to_remove.activity_id;`;
 }
 
 export function getDeleteStudyPlansQuery(){
@@ -55,17 +183,17 @@ export function getDeleteUserPlansQuery(){
     return `delete from user_plans where plan_id = $1 and not user_id = any ($2)`
 }
 
-export function getInsertUserPlansQuery(){
-    return  ` with un_nested_users as (
-                 select unnest($2::text[]) as user_id ),
-               registered_users as (
-                 select array_agg(user_id) as list from user_plans where plan_id = $1 )
-              insert into user_plans (user_id, plan_id)
-              select unu.user_id, $1
-              from un_nested_users unu, registered_users ru
-              where not unu.user_id = any(COALESCE(ru.list, array[]::text[]))
-              RETURNING user_id as "userId";`;
-}
+// export function getInsertUserPlansQuery(){
+//     return  ` with un_nested_users as (
+//                  select unnest($2::text[]) as user_id ),
+//                registered_users as (
+//                  select array_agg(user_id) as list from user_plans where plan_id = $1 )
+//               insert into user_plans (user_id, plan_id)
+//               select unu.user_id, $1
+//               from un_nested_users unu, registered_users ru
+//               where not unu.user_id = any(COALESCE(ru.list, array[]::text[]))
+//               RETURNING user_id as "userId";`;
+// }
 
 // export function getInsertUserPlansQuery() {
 //   return ` with un_nested_users as (
@@ -87,29 +215,29 @@ export function getInsertUserPlansQuery(){
 //             RETURNING user_id as "userId";`;
 // }
 
-// export function getInsertUserPlansQuery() {
-//   return `  WITH un_nested_users AS (
-//                 SELECT unnest($2::text[]) AS user_id
-//             ), registered_users AS (
-//                 SELECT user_id, array_agg(plan_id) AS plan_ids
-//                 FROM user_plans
-//                 GROUP BY user_id
-//             )
-//             DELETE FROM user_plans
-//             USING (
-//                 SELECT unu.user_id
-//                 FROM un_nested_users unu
-//                 LEFT JOIN registered_users ru ON unu.user_id = ru.user_id
-//                 WHERE ru.user_id IS NOT NULL AND $1 <> ALL(ru.plan_ids)
-//             ) AS to_delete
-//             WHERE user_plans.user_id = to_delete.user_id;
+export function getInsertUserPlansQuery() {
+  return `  WITH un_nested_users AS (
+                SELECT unnest($2::text[]) AS user_id
+            ), registered_users AS (
+                SELECT user_id, array_agg(plan_id) AS plan_ids
+                FROM user_plans
+                GROUP BY user_id
+            )
+            DELETE FROM user_plans
+            USING (
+                SELECT unu.user_id
+                FROM un_nested_users unu
+                LEFT JOIN registered_users ru ON unu.user_id = ru.user_id
+                WHERE ru.user_id IS NOT NULL AND $1 <> ALL(ru.plan_ids)
+            ) AS to_delete
+            WHERE user_plans.user_id = to_delete.user_id;
 
-//             INSERT INTO user_plans (user_id, plan_id)
-//             SELECT unu.user_id, $1
-//             FROM un_nested_users unu
-//             LEFT JOIN registered_users ru ON unu.user_id = ru.user_id
-//             WHERE ru.user_id IS NULL OR $1 <> ALL(ru.plan_ids)
-//             ON CONFLICT (user_id) DO UPDATE
-//             SET plan_id = EXCLUDED.plan_id
-//             RETURNING user_id AS "userId", plan_id AS "planId";`;
-// }
+            INSERT INTO user_plans (user_id, plan_id)
+            SELECT unu.user_id, $1
+            FROM un_nested_users unu
+            LEFT JOIN registered_users ru ON unu.user_id = ru.user_id
+            WHERE ru.user_id IS NULL OR $1 <> ALL(ru.plan_ids)
+            ON CONFLICT (user_id) DO UPDATE
+            SET plan_id = EXCLUDED.plan_id
+            RETURNING user_id AS "userId", plan_id AS "planId";`;
+}

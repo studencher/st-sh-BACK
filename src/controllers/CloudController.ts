@@ -18,6 +18,7 @@ class CloudController {
         directory: req.body.directory,
         fileName: req.body.fileName,
         action: req.body.action,
+        duration: req.body.duration,
       };
       const { err, response } = await this.cloudService.generatePreSignUrl(
         data

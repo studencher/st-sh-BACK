@@ -69,6 +69,7 @@ export class ActivitiesRepository extends EntityRepository{
               video.title,
               video.fileName,
               video.srcUrl,
+              video.duration,
             ]);
         })
         const sqlQueries: string[] = [updateActivityQuery,  deleteActivityVideosQuery, ...insertVideoQueriesBucket];
