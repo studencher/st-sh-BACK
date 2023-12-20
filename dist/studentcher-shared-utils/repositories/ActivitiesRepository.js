@@ -78,6 +78,7 @@ class ActivitiesRepository extends EntityRepository_1.EntityRepository {
                 video.title,
                 video.fileName,
                 video.srcUrl,
+                video.duration,
             ]);
         });
         const sqlQueries = [updateActivityQuery, deleteActivityVideosQuery, ...insertVideoQueriesBucket];

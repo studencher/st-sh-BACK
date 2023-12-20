@@ -52,7 +52,7 @@ class CloudService {
                     return {
                         err: new CustomError_1.CustomError(`File extension ${fileExtension} is forbidden.`),
                     };
-                data.fileName = `${data.fileName.split('.')[0]}_${CloudService.idGenerator()}.${fileExtension}`;
+                data.fileName = `${data.duration}-${data.fileName.split('.')[0]}_${CloudService.idGenerator()}.${fileExtension}`;
             }
             // const fileName = data.directory == null ? data.fileName : `${CloudService.directoriesIndex[data.directory]}/${data.fileName}`;
             const fileName = data.directory == null

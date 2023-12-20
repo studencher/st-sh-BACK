@@ -43,14 +43,25 @@ class StudyPlansRepository extends studentcher_shared_utils_1.EntityRepository {
         const insertPlanActivitiesValuesBucket = [];
         data.activityIds.forEach((activityId, index) => {
             insertPlanActivitiesQueriesBucket.push(insertStudyPlanActivityQuery);
-            insertPlanActivitiesValuesBucket.push([data.planId, activityId, index + 1]);
+            insertPlanActivitiesValuesBucket.push([
+                data.planId,
+                activityId,
+                index + 1,
+            ]);
         });
-        const sqlQueries = [insertStudyPlanQuery, ...insertPlanActivitiesQueriesBucket];
-        const sqlValues = [insertStudyPlanValues, ...insertPlanActivitiesValuesBucket];
+        const sqlQueries = [
+            insertStudyPlanQuery,
+            ...insertPlanActivitiesQueriesBucket,
+        ];
+        const sqlValues = [
+            insertStudyPlanValues,
+            ...insertPlanActivitiesValuesBucket,
+        ];
         const response = await this.pgClient.callDbTransaction(sqlQueries, sqlValues);
         const planActivitiesStartingIndex = 1;
         const plan = response[0].rows[0];
-        for (let i = planActivitiesStartingIndex; i < insertPlanActivitiesQueriesBucket.length + planActivitiesStartingIndex; i++)
+        for (let i = planActivitiesStartingIndex; i <
+            insertPlanActivitiesQueriesBucket.length + planActivitiesStartingIndex; i++)
             plan.activities.push(response[i].rows[0].activityId);
         return plan;
     }
@@ -59,22 +70,69 @@ class StudyPlansRepository extends studentcher_shared_utils_1.EntityRepository {
         const updatePlanValues = [data.planId, data.name];
         const deletePlanActivitiesQuery = StudyPlansRepository.queries.getDeleteStudyPlanActivitiesQuery();
         const deletePlanActivitiesValues = [data.planId];
+        // const deletePlanActivitiesQuery1: string =
+        //   StudyPlansRepository.queries.getDeleteStudyPlanActivitiesQueryFromUserActivityVideoStatusHistory();
+        //   const deletePlanActivitiesValues1: any[] = [data.planId, data.activityIds];
+        //   const deletePlanActivitiesQuery2: string =
+        //     StudyPlansRepository.queries.getDeleteStudyPlanActivitiesQueryFromUserActivityMetaData();
+        //   const deletePlanActivitiesValues2: any[] = [data.planId, data.activityIds];
+        //   const deletePlanActivitiesQuery3: string =
+        //     StudyPlansRepository.queries.getDeleteStudyPlanActivitiesQueryFromUserActivityHistory();
+        //   const deletePlanActivitiesValues3: any[] = [data.planId, data.activityIds];
+        //   const deletePlanActivitiesQuery4: string =
+        //     StudyPlansRepository.queries.getDeleteStudyPlanActivitiesQueryFromPlanActivities();
+        //   const deletePlanActivitiesValues4: any[] = [data.planId, data.activityIds];
         const insertStudyPlanActivityQuery = StudyPlansRepository.queries.getInsertStudyPlanActivityQuery();
         const insertPlanActivitiesQueriesBucket = [];
         const insertPlanActivitiesValuesBucket = [];
+        const insertStudyPlanUserQuery = StudyPlansRepository.queries.getInsertUserPlansQuery();
+        const insertPlanUsersValues = [data.planId, data.users];
+        // const deleteUserPlansQuery: string =
+        //   StudyPlansRepository.queries.getDeleteUserPlansQuery();
+        // const insertUserPlansQuery: string =
+        //   StudyPlansRepository.queries.getInsertUserPlansQuery();
+        // const values = [data.planId, [...data.users]];
         data.activityIds.forEach((activityId, index) => {
             insertPlanActivitiesQueriesBucket.push(insertStudyPlanActivityQuery);
-            insertPlanActivitiesValuesBucket.push([data.planId, activityId, index + 1]);
+            insertPlanActivitiesValuesBucket.push([
+                data.planId,
+                activityId,
+                index + 1,
+            ]);
         });
-        const sqlQueries = [updatePlanQuery, deletePlanActivitiesQuery, ...insertPlanActivitiesQueriesBucket];
-        const sqlValues = [updatePlanValues, deletePlanActivitiesValues, ...insertPlanActivitiesValuesBucket];
+        const sqlQueries = [
+            updatePlanQuery,
+            deletePlanActivitiesQuery,
+            //   deletePlanActivitiesQuery1,
+            //   deletePlanActivitiesQuery2,
+            //   deletePlanActivitiesQuery3,
+            //   deletePlanActivitiesQuery4,
+            ...insertPlanActivitiesQueriesBucket,
+            insertStudyPlanUserQuery,
+        ];
+        const sqlValues = [
+            updatePlanValues,
+            deletePlanActivitiesValues,
+            //   deletePlanActivitiesValues1,
+            //   deletePlanActivitiesValues2,
+            //   deletePlanActivitiesValues3,
+            //   deletePlanActivitiesValues4,
+            ...insertPlanActivitiesValuesBucket,
+            insertPlanUsersValues,
+        ];
         const response = await this.pgClient.callDbTransaction(sqlQueries, sqlValues);
         if (response[0].rowCount === 0)
-            throw new studentcher_shared_utils_1.CustomError("Study Plan not found.", 404);
+            throw new studentcher_shared_utils_1.CustomError('Study Plan not found.', 404);
         const planActivitiesStartingIndex = 2;
         const plan = response[0].rows[0];
-        for (let i = planActivitiesStartingIndex; i < insertPlanActivitiesQueriesBucket.length + planActivitiesStartingIndex; i++)
+        for (let i = planActivitiesStartingIndex; i <
+            insertPlanActivitiesQueriesBucket.length + planActivitiesStartingIndex; i++)
             plan.activities.push(response[i].rows[0].activityId);
+        //   const addedUserIds: string[] = response[1].rows.reduce(
+        //     (accumulator, { userId }) => accumulator.concat(userId),
+        //     []
+        //   );
+        //   return addedUserIds;
         return plan;
     }
     async deleteMany(data) {
@@ -82,7 +140,7 @@ class StudyPlansRepository extends studentcher_shared_utils_1.EntityRepository {
         const deleteStudyPlansValues = [data.planIds];
         const response = await this.pgClient.callDbCmd(deleteStudyPlansQuery, deleteStudyPlansValues);
         if (response.rowCount === 0)
-            throw new studentcher_shared_utils_1.CustomError("Study plans not found.", 404);
+            throw new studentcher_shared_utils_1.CustomError('Study plans not found.', 404);
         return response.rows;
     }
     async findMany(_data) {

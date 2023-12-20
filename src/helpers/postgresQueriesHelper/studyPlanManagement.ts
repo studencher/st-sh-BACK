@@ -1,11 +1,11 @@
-export function getInsertStudyPlanQuery(){
-    return `insert into plans (id, name) values ($1, $2) 
-            RETURNING id, name, extract(epoch from timestamp)::float as "createdAt", array[]::uuid[] as activities `
+export function getInsertStudyPlanQuery() {
+  return `insert into plans (id, name) values ($1, $2) 
+            RETURNING id, name, extract(epoch from timestamp)::float as "createdAt", array[]::uuid[] as activities `;
 }
 
-// export function getInsertStudyPlanActivityQuery(){
-//     return `insert into plan_activities (plan_id, activity_id, index) values ($1, $2, $3) 
-//             RETURNING plan_id as "planId", activity_id as "activityId" , index `
+// export function getInsertStudyPlanActivityQuery() {
+//   return `insert into plan_activities (plan_id, activity_id, index) values ($1, $2, $3)
+//             RETURNING plan_id as "planId", activity_id as "activityId" , index `;
 // }
 export function getInsertStudyPlanActivityQuery() {
   return `INSERT INTO plan_activities (plan_id, activity_id, index)
@@ -16,21 +16,11 @@ RETURNING plan_id as "planId", activity_id as "activityId", index;
 `;
 }
 
-export function getUpdateStudyPlanQuery(){
-    return `update plans set name = COALESCE($2, name)
+export function getUpdateStudyPlanQuery() {
+  return `update plans set name = COALESCE($2, name)
             where id = $1
-            RETURNING id, name, extract(epoch from timestamp)::float as "createdAt", array[]::uuid[] as activities `
+            RETURNING id, name, extract(epoch from timestamp)::float as "createdAt", array[]::uuid[] as activities `;
 }
-// export function getSelectStudyPlansQuery(){
-//     return `with plan_activities_list as (
-//                 select p.id, array_agg(activity_id) as activities
-//                 from plans p
-//                 join plan_activities pa on p.id = pa.plan_id
-//                 group by p.id)
-//             select p.id, name,  COALESCE(activities, array[]::uuid[]) as activities
-//             from plans p
-//             left join plan_activities_list pal on pal.id = p.id    `
-// }
 export function getSelectStudyPlansQuery() {
   return `with plan_activities_list as (
                     select p.id, array_agg(activity_id) as activities 
@@ -48,10 +38,61 @@ export function getSelectStudyPlansQuery() {
             left join plan_activities_list pal on pal.id = p.id
             left join user_activities_list ual on ual.id = p.id;`;
 }
+export function getDeleteStudyPlanActivitiesQuery() {
+  return `delete from plan_activities where plan_id = $1;`;
+}
 
-// export function getDeleteStudyPlanActivitiesQuery(){
-//     return `delete from plan_activities 
-//             where plan_id = $1`
+// export function getDeleteStudyPlanActivitiesQuery() {
+//   return `delete from user_activity_video_status_history where plan_id = $1 and activity_id = $2;
+//           delete from user_activity_meta_data where plan_id = $1 and activity_id = $2;
+//           delete from user_activity_history where plan_id = $1 and activity_id = $2;
+//           delete from plan_activities where plan_id = $1;`;
+// }
+// export function getDeleteStudyPlanActivitiesQuery() {
+//   return `WITH activities_to_remove AS (
+//     SELECT pa.plan_id, pa.activity_id
+//     FROM plan_activities pa
+//     WHERE pa.plan_id = $1 AND pa.activity_id = ANY($2::text[])
+// ),
+// relevant_activities AS (
+//     SELECT pa.plan_id, pa.activity_id, 'user_activity_video_status_history' AS table_name
+//     FROM activities_to_remove pa
+    
+//     UNION ALL
+    
+//     SELECT pa.plan_id, pa.activity_id, 'user_activity_meta_data' AS table_name
+//     FROM activities_to_remove pa
+    
+//     UNION ALL
+    
+//     SELECT pa.plan_id, pa.activity_id, 'user_activity_history' AS table_name
+//     FROM activities_to_remove pa
+    
+//     UNION ALL
+    
+//     SELECT pa.plan_id, pa.activity_id, 'plan_activities' AS table_name
+//     FROM activities_to_remove pa
+// )
+// DELETE FROM user_activity_video_status_history
+// USING relevant_activities
+// WHERE user_activity_video_status_history.plan_id = relevant_activities.plan_id
+//   AND user_activity_video_status_history.activity_id = relevant_activities.activity_id;
+
+// DELETE FROM user_activity_meta_data
+// USING relevant_activities
+// WHERE user_activity_meta_data.plan_id = relevant_activities.plan_id
+//   AND user_activity_meta_data.activity_id = relevant_activities.activity_id;
+
+// DELETE FROM user_activity_history
+// USING relevant_activities
+// WHERE user_activity_history.plan_id = relevant_activities.plan_id
+//   AND user_activity_history.activity_id = relevant_activities.activity_id;
+
+// DELETE FROM plan_activities
+// USING activities_to_remove
+// WHERE plan_activities.plan_id = activities_to_remove.plan_id
+//   AND plan_activities.activity_id = activities_to_remove.activity_id;
+// `;
 // }
 export function getDeleteStudyPlanActivitiesQueryFromUserActivityVideoStatusHistory() {
   return `WITH activities_to_remove AS (
@@ -60,22 +101,7 @@ export function getDeleteStudyPlanActivitiesQueryFromUserActivityVideoStatusHist
     WHERE pa.plan_id = $1 AND pa.activity_id = ANY($2::text[])
 ),
 relevant_activities AS (
-    SELECT pa.plan_id, pa.activity_id, 'user_activity_video_status_history' AS table_name
-    FROM activities_to_remove pa
-    
-    UNION ALL
-    
-    SELECT pa.plan_id, pa.activity_id, 'user_activity_meta_data' AS table_name
-    FROM activities_to_remove pa
-    
-    UNION ALL
-    
-    SELECT pa.plan_id, pa.activity_id, 'user_activity_history' AS table_name
-    FROM activities_to_remove pa
-    
-    UNION ALL
-    
-    SELECT pa.plan_id, pa.activity_id, 'plan_activities' AS table_name
+    SELECT pa.plan_id, pa.activity_id
     FROM activities_to_remove pa
 )
 DELETE FROM user_activity_video_status_history
@@ -90,22 +116,7 @@ export function getDeleteStudyPlanActivitiesQueryFromUserActivityMetaData() {
     WHERE pa.plan_id = $1 AND pa.activity_id = ANY($2::text[])
 ),
 relevant_activities AS (
-    SELECT pa.plan_id, pa.activity_id, 'user_activity_video_status_history' AS table_name
-    FROM activities_to_remove pa
-    
-    UNION ALL
-    
-    SELECT pa.plan_id, pa.activity_id, 'user_activity_meta_data' AS table_name
-    FROM activities_to_remove pa
-    
-    UNION ALL
-    
-    SELECT pa.plan_id, pa.activity_id, 'user_activity_history' AS table_name
-    FROM activities_to_remove pa
-    
-    UNION ALL
-    
-    SELECT pa.plan_id, pa.activity_id, 'plan_activities' AS table_name
+    SELECT pa.plan_id, pa.activity_id
     FROM activities_to_remove pa
 )
 DELETE FROM user_activity_meta_data
@@ -120,22 +131,7 @@ export function getDeleteStudyPlanActivitiesQueryFromUserActivityHistory() {
     WHERE pa.plan_id = $1 AND pa.activity_id = ANY($2::text[])
 ),
 relevant_activities AS (
-    SELECT pa.plan_id, pa.activity_id, 'user_activity_video_status_history' AS table_name
-    FROM activities_to_remove pa
-    
-    UNION ALL
-    
-    SELECT pa.plan_id, pa.activity_id, 'user_activity_meta_data' AS table_name
-    FROM activities_to_remove pa
-    
-    UNION ALL
-    
-    SELECT pa.plan_id, pa.activity_id, 'user_activity_history' AS table_name
-    FROM activities_to_remove pa
-    
-    UNION ALL
-    
-    SELECT pa.plan_id, pa.activity_id, 'plan_activities' AS table_name
+    SELECT pa.plan_id, pa.activity_id
     FROM activities_to_remove pa
 )
 DELETE FROM user_activity_history
@@ -150,22 +146,7 @@ export function getDeleteStudyPlanActivitiesQueryFromPlanActivities() {
     WHERE pa.plan_id = $1 AND pa.activity_id = ANY($2::text[])
 ),
 relevant_activities AS (
-    SELECT pa.plan_id, pa.activity_id, 'user_activity_video_status_history' AS table_name
-    FROM activities_to_remove pa
-    
-    UNION ALL
-    
-    SELECT pa.plan_id, pa.activity_id, 'user_activity_meta_data' AS table_name
-    FROM activities_to_remove pa
-    
-    UNION ALL
-    
-    SELECT pa.plan_id, pa.activity_id, 'user_activity_history' AS table_name
-    FROM activities_to_remove pa
-    
-    UNION ALL
-    
-    SELECT pa.plan_id, pa.activity_id, 'plan_activities' AS table_name
+    SELECT pa.plan_id, pa.activity_id
     FROM activities_to_remove pa
 )
 DELETE FROM plan_activities
@@ -174,13 +155,13 @@ WHERE plan_activities.plan_id = activities_to_remove.plan_id
   AND plan_activities.activity_id = activities_to_remove.activity_id;`;
 }
 
-export function getDeleteStudyPlansQuery(){
-    return `delete from plans where id = any($1)
-            RETURNING id, name, extract(epoch from timestamp)::float as "createdAt"`
+export function getDeleteStudyPlansQuery() {
+  return `delete from plans where id = any($1)
+            RETURNING id, name, extract(epoch from timestamp)::float as "createdAt"`;
 }
 
-export function getDeleteUserPlansQuery(){
-    return `delete from user_plans where plan_id = $1 and not user_id = any ($2)`
+export function getDeleteUserPlansQuery() {
+  return `delete from user_plans where plan_id = $1 and not user_id = any ($2)`;
 }
 
 // export function getInsertUserPlansQuery(){
@@ -241,7 +222,3 @@ export function getInsertUserPlansQuery() {
             SET plan_id = EXCLUDED.plan_id
             RETURNING user_id AS "userId", plan_id AS "planId";`;
 }
-
-export function getDeleteStudyPlanActivitiesQuery() {
-    return `delete from plan_activities where plan_id = $1;`;
-  }

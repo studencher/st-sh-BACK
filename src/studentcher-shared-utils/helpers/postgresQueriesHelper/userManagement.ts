@@ -82,12 +82,20 @@ export function getDeleteUsersQuery() {
 
 export function getSelectPersonalZoneQuery() {
   return `select u.id as "userId", u.name as "userName", r.name as "roleName", p.name as "planName", p.id as "planId",
-            all_activities as "allActivities", current_activity as "currentActivity", is_plan_finished as "isPlanFinished", last_video_seen_index as "lastVideoSeenIndex"
+            all_activities as "allActivities", current_activity as "currentActivity", is_plan_finished as "isPlanFinished", 
+            last_video_seen_index as "lastVideoSeenIndex"
             from users u 
             join roles r on u.id = $1 and u.role_id = r.id
             left join user_current_activity(array[$1]) uca on u.id = uca.user_id  
             left join plans p on uca.plan_id = p.id ; `;
 }
+
+
+
+ 
+
+
+
 
 export function getInsertUserActivityQuery() {
   return `insert into user_activity_history (user_id, plan_id, activity_id, started_at, ended_at)  

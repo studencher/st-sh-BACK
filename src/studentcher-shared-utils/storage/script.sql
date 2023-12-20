@@ -596,7 +596,7 @@ CREATE OR REPLACE FUNCTION user_current_activity(P_USER_IDS TEXT[])
           END as current_activity,
           COALESCE(ula.video_index, 1) - 1 as last_video_seen_index
           from user_max_activity_index umi
-          join searched_users_plan_activities_data supa on umi.plan_id = supa.plan_id
+          join searched_users_plan_activities_data    on umi.plan_id = searched_users_plan_activities_data.plan_id
           left join user_last_activity_seen ula on
               umi.user_id = ula.user_id and
               umi.plan_id = ula.plan_id and
