@@ -1,5 +1,6 @@
 import { RolesRepository } from '../repositories/RolesRepository';
 import * as bcrypt from 'bcrypt';
+import { combineDataWithAuxillaryData,fixIsVideoFinished  } from '../functions/UsersFunctions';
 
 import { UsersRepository } from '../repositories/UsersRepository';
 import { IUserDTO } from '../entities/user';
@@ -146,8 +147,18 @@ export class UsersService implements IUsersService {
 
   async getPersonalZone(data: IClientRequestData): Promise<ServiceResponse> {
     try {
-      const privateZoneData: IUserPrivateZone =
-        await this.userRepository.getPrivateZone(data);
+      let privateZoneData: IUserPrivateZone = await this.userRepository.getPrivateZone(data);  // get all the data
+      let currentActivityIndex = privateZoneData.currentActivity.index -1
+      const allVideos = privateZoneData.allActivities[currentActivityIndex].videos
+      const privateZoneDataAuxillary = await this.userRepository.getPrivateZoneAuxillary(privateZoneData.currentActivity.activityId) // get the the src_url of each video
+      let updatedVideos = combineDataWithAuxillaryData(allVideos,privateZoneDataAuxillary)   // update the src url in the videos
+         let currentActivityId = privateZoneData.currentActivity.activityId
+        let  isVideoCompleted = await this.userRepository.getIsVideoCompleted(currentActivityId) // get the isVideoCompleted
+         updatedVideos = fixIsVideoFinished(updatedVideos, isVideoCompleted,privateZoneData )   // update all videos in current activity iscompleted true
+
+         privateZoneData.allActivities[currentActivityIndex].videos = updatedVideos
+         privateZoneData.currentActivity.videos = updatedVideos
+         
       const totalActivities = privateZoneData?.allActivities?.length || 0;
       for (
         let activityIndex = 0;

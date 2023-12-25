@@ -92,6 +92,24 @@ class UsersRepository extends EntityRepository_1.EntityRepository {
         const response = await this.pgClient.callDb(selectUserMetaDataCmd);
         return response.rows;
     }
+    async getPrivateZoneAuxillary(data) {
+        const selectPersonalZoneQuery = userManagementQueries.getSelectPersonalZoneQueryAuxillary();
+        const selectPersonalZoneValues = [data];
+        const response = await this.pgClient.callDbCmd(selectPersonalZoneQuery, selectPersonalZoneValues);
+        const privateZone = response.rows;
+        if (privateZone == null)
+            throw new CustomError_1.CustomError("Personal zone not found.");
+        return privateZone;
+    }
+    async getIsVideoCompleted(currentActivityId) {
+        const selectPersonalZoneQuery = userManagementQueries.getSelectIsVideoCompleted();
+        const selectPersonalZoneValues = [currentActivityId];
+        const response = await this.pgClient.callDbCmd(selectPersonalZoneQuery, selectPersonalZoneValues);
+        const privateZone = response.rows;
+        if (privateZone == null)
+            throw new CustomError_1.CustomError("Personal zone not found.");
+        return privateZone;
+    }
 }
 exports.UsersRepository = UsersRepository;
 //# sourceMappingURL=UsersRepository.js.map

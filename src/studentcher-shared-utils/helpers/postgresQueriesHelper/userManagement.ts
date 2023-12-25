@@ -92,6 +92,10 @@ export function getSelectPersonalZoneQuery() {
 
 
 
+export function getSelectPersonalZoneQueryAuxillary() {
+  return `select src_url,title from activity_videos where activity_id = $1`;
+}
+
  
 
 
@@ -115,3 +119,9 @@ export function getSelectUserMetaData() {
             from user_activity_meta_data
             order by timestamp`;
 }
+
+export function getSelectIsVideoCompleted() {
+  return ` select count(*)  from user_activity_video_status_history where activity_id = $1`;
+  
+}
+ 

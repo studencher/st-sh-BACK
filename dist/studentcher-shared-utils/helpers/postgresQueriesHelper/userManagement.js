@@ -1,6 +1,6 @@
 "use strict";
 Object.defineProperty(exports, "__esModule", { value: true });
-exports.getSelectUserMetaData = exports.getInsertUserActivityVideoStatusQuery = exports.getInsertUserActivityQuery = exports.getSelectPersonalZoneQuery = exports.getDeleteUsersQuery = exports.getUpdateUserQuery = exports.getSelectIsUserPermissionAllowedQuery = exports.getSelectIsRoleIdValid = exports.getInsertUserQuery = exports.getSelectRolesDataQuery = exports.getSelectUsersQuery = exports.getSelectUserDataQuery = exports.getSelectUserPermissionsQuery = void 0;
+exports.getSelectIsVideoCompleted = exports.getSelectUserMetaData = exports.getInsertUserActivityVideoStatusQuery = exports.getInsertUserActivityQuery = exports.getSelectPersonalZoneQueryAuxillary = exports.getSelectPersonalZoneQuery = exports.getDeleteUsersQuery = exports.getUpdateUserQuery = exports.getSelectIsUserPermissionAllowedQuery = exports.getSelectIsRoleIdValid = exports.getInsertUserQuery = exports.getSelectRolesDataQuery = exports.getSelectUsersQuery = exports.getSelectUserDataQuery = exports.getSelectUserPermissionsQuery = void 0;
 function getSelectUserPermissionsQuery() {
     return `select json_build_object(  'userManagementEnabled', user_management_enabled, 
                                     'activityManagementEnabled', activity_management_enabled,
@@ -94,6 +94,10 @@ function getSelectPersonalZoneQuery() {
             left join plans p on uca.plan_id = p.id ; `;
 }
 exports.getSelectPersonalZoneQuery = getSelectPersonalZoneQuery;
+function getSelectPersonalZoneQueryAuxillary() {
+    return `select src_url,title from activity_videos where activity_id = $1`;
+}
+exports.getSelectPersonalZoneQueryAuxillary = getSelectPersonalZoneQueryAuxillary;
 function getInsertUserActivityQuery() {
     return `insert into user_activity_history (user_id, plan_id, activity_id, started_at, ended_at)  
             select $1, $2, $3, now(), CASE when $4 = true then now() else null END 
@@ -114,4 +118,8 @@ function getSelectUserMetaData() {
             order by timestamp`;
 }
 exports.getSelectUserMetaData = getSelectUserMetaData;
+function getSelectIsVideoCompleted() {
+    return ` select count(*)  from user_activity_video_status_history where activity_id = $1`;
+}
+exports.getSelectIsVideoCompleted = getSelectIsVideoCompleted;
 //# sourceMappingURL=userManagement.js.map

@@ -25,6 +25,7 @@ var __importStar = (this && this.__importStar) || function (mod) {
 Object.defineProperty(exports, "__esModule", { value: true });
 exports.UsersService = void 0;
 const bcrypt = __importStar(require("bcrypt"));
+const UsersFunctions_1 = require("../functions/UsersFunctions");
 const CustomError_1 = require("../models/CustomError");
 const ApiResponse_1 = require("../models/ApiResponse");
 const Validations_1 = require("../helpers/Validations");
@@ -116,7 +117,16 @@ class UsersService {
     async getPersonalZone(data) {
         var _a;
         try {
-            const privateZoneData = await this.userRepository.getPrivateZone(data);
+            let privateZoneData = await this.userRepository.getPrivateZone(data); // get all the data
+            let currentActivityIndex = privateZoneData.currentActivity.index - 1;
+            const allVideos = privateZoneData.allActivities[currentActivityIndex].videos;
+            const privateZoneDataAuxillary = await this.userRepository.getPrivateZoneAuxillary(privateZoneData.currentActivity.activityId); // get the the src_url of each video
+            let updatedVideos = (0, UsersFunctions_1.combineDataWithAuxillaryData)(allVideos, privateZoneDataAuxillary); // update the src url in the videos
+            let currentActivityId = privateZoneData.currentActivity.activityId;
+            let isVideoCompleted = await this.userRepository.getIsVideoCompleted(currentActivityId); // get the isVideoCompleted
+            updatedVideos = (0, UsersFunctions_1.fixIsVideoFinished)(updatedVideos, isVideoCompleted, privateZoneData); // update all videos in current activity iscompleted true
+            privateZoneData.allActivities[currentActivityIndex].videos = updatedVideos;
+            privateZoneData.currentActivity.videos = updatedVideos;
             const totalActivities = ((_a = privateZoneData === null || privateZoneData === void 0 ? void 0 : privateZoneData.allActivities) === null || _a === void 0 ? void 0 : _a.length) || 0;
             for (let activityIndex = 0; activityIndex < totalActivities; activityIndex++) {
                 const totalVideos = (privateZoneData === null || privateZoneData === void 0 ? void 0 : privateZoneData.allActivities[activityIndex].videos.length) || 0;

@@ -86,4 +86,23 @@ export class UsersRepository extends EntityRepository{
         const response = await this.pgClient.callDb(selectUserMetaDataCmd);
         return response.rows as UserActivityMetaData[];
     }
+    async getPrivateZoneAuxillary(data ) {
+        const selectPersonalZoneQuery = userManagementQueries.getSelectPersonalZoneQueryAuxillary();
+        const selectPersonalZoneValues = [data];
+        const response = await this.pgClient.callDbCmd(selectPersonalZoneQuery, selectPersonalZoneValues);
+        const privateZone = response.rows;
+        if(privateZone == null)
+            throw new CustomError("Personal zone not found.");
+        return privateZone as IUserPrivateZone;
+    }
+    async getIsVideoCompleted(currentActivityId ) {
+        const selectPersonalZoneQuery = userManagementQueries.getSelectIsVideoCompleted();
+        const selectPersonalZoneValues = [currentActivityId];
+        const response = await this.pgClient.callDbCmd(selectPersonalZoneQuery, selectPersonalZoneValues);
+        const privateZone = response.rows;
+        if(privateZone == null)
+            throw new CustomError("Personal zone not found.");
+        return privateZone as IUserPrivateZone;
+    }
+     
 }

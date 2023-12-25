@@ -87,6 +87,7 @@ class UsersController {
             };
             const { err, response } = await this.usersService.addUserActivity(data);
             if (err != null) {
+                console.log('a')
                 return next(err);
             }
             return res.status(201).send({ data: response });
