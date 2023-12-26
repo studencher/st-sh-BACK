@@ -119,7 +119,7 @@ function getSelectUserMetaData() {
 }
 exports.getSelectUserMetaData = getSelectUserMetaData;
 function getSelectIsVideoCompleted() {
-    return ` select count(*)  from user_activity_video_status_history where activity_id = $1`;
+    return ` select count(*)  from user_activity_video_status_history where activity_id = $1 and user_id = $2`;
 }
 exports.getSelectIsVideoCompleted = getSelectIsVideoCompleted;
 function getVideoLength() {

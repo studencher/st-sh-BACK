@@ -101,9 +101,9 @@ class UsersRepository extends EntityRepository_1.EntityRepository {
             throw new CustomError_1.CustomError("Personal zone not found.");
         return privateZone;
     }
-    async getIsVideoCompleted(currentActivityId) {
+    async getIsVideoCompleted(currentActivityId, userId) {
         const selectPersonalZoneQuery = userManagementQueries.getSelectIsVideoCompleted();
-        const selectPersonalZoneValues = [currentActivityId];
+        const selectPersonalZoneValues = [currentActivityId, userId];
         const response = await this.pgClient.callDbCmd(selectPersonalZoneQuery, selectPersonalZoneValues);
         const privateZone = response.rows;
         if (privateZone == null)
