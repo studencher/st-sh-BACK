@@ -6,9 +6,9 @@ import { Validations } from '../helpers/Validations';
 import { CustomError } from '../models/CustomError';
 import { ApiResponse } from '../models/ApiResponse';
 import { Constants } from '../helpers/Constants';
+import { videoLengthtoDb } from '../functions/UsersFunctions';
 import * as process from 'process';
-
-export interface ICloudService {
+ export interface ICloudService {
   generatePreSignUrl(
     data: IClientRequestData
   ): Promise<ServiceResponse<{ preSignedUrl: string; fileName: string }>>;
@@ -64,9 +64,14 @@ export class CloudService implements ICloudService {
             ),
           };
 
-          data.fileName = `${data.duration}-${
-          data.fileName.split('.')[0]
-        }_${CloudService.idGenerator()}.${fileExtension}`;
+      //    data.fileName = `${data.duration}-${
+    //      data.fileName.split('.')[0]
+    //    }_${CloudService.idGenerator()}.${fileExtension}`;
+
+  
+
+
+
       }
       // const fileName = data.directory == null ? data.fileName : `${CloudService.directoriesIndex[data.directory]}/${data.fileName}`;
       const fileName =
@@ -78,6 +83,14 @@ export class CloudService implements ICloudService {
         fileName,
         data.action
       );
+
+        if(preSignedUrl){                                     // save the length of uploaded video to 
+          let duration = data.duration
+          videoLengthtoDb(CloudService,fileName, duration)
+        }
+
+
+
       return { response: new ApiResponse(true, { preSignedUrl, fileName }) };
     } catch (err) {
       return { err };

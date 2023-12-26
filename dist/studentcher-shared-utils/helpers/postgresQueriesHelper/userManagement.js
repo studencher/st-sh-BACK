@@ -1,6 +1,6 @@
 "use strict";
 Object.defineProperty(exports, "__esModule", { value: true });
-exports.getSelectIsVideoCompleted = exports.getSelectUserMetaData = exports.getInsertUserActivityVideoStatusQuery = exports.getInsertUserActivityQuery = exports.getSelectPersonalZoneQueryAuxillary = exports.getSelectPersonalZoneQuery = exports.getDeleteUsersQuery = exports.getUpdateUserQuery = exports.getSelectIsUserPermissionAllowedQuery = exports.getSelectIsRoleIdValid = exports.getInsertUserQuery = exports.getSelectRolesDataQuery = exports.getSelectUsersQuery = exports.getSelectUserDataQuery = exports.getSelectUserPermissionsQuery = void 0;
+exports.getCurrentActivity = exports.getVideoLength = exports.getSelectIsVideoCompleted = exports.getSelectUserMetaData = exports.getInsertUserActivityVideoStatusQuery = exports.getInsertUserActivityQuery = exports.getSelectPersonalZoneQueryAuxillary = exports.getSelectPersonalZoneQuery = exports.getDeleteUsersQuery = exports.getUpdateUserQuery = exports.getSelectIsUserPermissionAllowedQuery = exports.getSelectIsRoleIdValid = exports.getInsertUserQuery = exports.getSelectRolesDataQuery = exports.getSelectUsersQuery = exports.getSelectUserDataQuery = exports.getSelectUserPermissionsQuery = void 0;
 function getSelectUserPermissionsQuery() {
     return `select json_build_object(  'userManagementEnabled', user_management_enabled, 
                                     'activityManagementEnabled', activity_management_enabled,
@@ -122,4 +122,12 @@ function getSelectIsVideoCompleted() {
     return ` select count(*)  from user_activity_video_status_history where activity_id = $1`;
 }
 exports.getSelectIsVideoCompleted = getSelectIsVideoCompleted;
+function getVideoLength() {
+    return 'select duration from eachvideoparameters where name = $1';
+}
+exports.getVideoLength = getVideoLength;
+function getCurrentActivity() {
+    return 'select  current_activity from user_current_activity where user_id = $1';
+}
+exports.getCurrentActivity = getCurrentActivity;
 //# sourceMappingURL=userManagement.js.map

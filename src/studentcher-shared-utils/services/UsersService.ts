@@ -148,17 +148,18 @@ export class UsersService implements IUsersService {
   async getPersonalZone(data: IClientRequestData): Promise<ServiceResponse> {
     try {
       let privateZoneData: IUserPrivateZone = await this.userRepository.getPrivateZone(data);  // get all the data
+      privateZoneData = await this.userRepository.fixTheCurrentActivity(privateZoneData)     // get the real current activity
       let currentActivityIndex = privateZoneData.currentActivity.index -1
-      const allVideos = privateZoneData.allActivities[currentActivityIndex].videos
+      let a = privateZoneData.allActivities.find((activity)=> activity.index == privateZoneData.currentActivity.index  )
+      const allVideos = a.videos
       const privateZoneDataAuxillary = await this.userRepository.getPrivateZoneAuxillary(privateZoneData.currentActivity.activityId) // get the the src_url of each video
       let updatedVideos = combineDataWithAuxillaryData(allVideos,privateZoneDataAuxillary)   // update the src url in the videos
          let currentActivityId = privateZoneData.currentActivity.activityId
         let  isVideoCompleted = await this.userRepository.getIsVideoCompleted(currentActivityId) // get the isVideoCompleted
          updatedVideos = fixIsVideoFinished(updatedVideos, isVideoCompleted,privateZoneData )   // update all videos in current activity iscompleted true
-
+          updatedVideos = await this.userRepository.getVideoLength(updatedVideos)
          privateZoneData.allActivities[currentActivityIndex].videos = updatedVideos
          privateZoneData.currentActivity.videos = updatedVideos
-         
       const totalActivities = privateZoneData?.allActivities?.length || 0;
       for (
         let activityIndex = 0;

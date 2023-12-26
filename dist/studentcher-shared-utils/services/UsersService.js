@@ -118,13 +118,16 @@ class UsersService {
         var _a;
         try {
             let privateZoneData = await this.userRepository.getPrivateZone(data); // get all the data
+            privateZoneData = await this.userRepository.fixTheCurrentActivity(privateZoneData); // get the real current activity
             let currentActivityIndex = privateZoneData.currentActivity.index - 1;
-            const allVideos = privateZoneData.allActivities[currentActivityIndex].videos;
+            let a = privateZoneData.allActivities.find((activity) => activity.index == privateZoneData.currentActivity.index);
+            const allVideos = a.videos;
             const privateZoneDataAuxillary = await this.userRepository.getPrivateZoneAuxillary(privateZoneData.currentActivity.activityId); // get the the src_url of each video
             let updatedVideos = (0, UsersFunctions_1.combineDataWithAuxillaryData)(allVideos, privateZoneDataAuxillary); // update the src url in the videos
             let currentActivityId = privateZoneData.currentActivity.activityId;
             let isVideoCompleted = await this.userRepository.getIsVideoCompleted(currentActivityId); // get the isVideoCompleted
             updatedVideos = (0, UsersFunctions_1.fixIsVideoFinished)(updatedVideos, isVideoCompleted, privateZoneData); // update all videos in current activity iscompleted true
+            updatedVideos = await this.userRepository.getVideoLength(updatedVideos);
             privateZoneData.allActivities[currentActivityIndex].videos = updatedVideos;
             privateZoneData.currentActivity.videos = updatedVideos;
             const totalActivities = ((_a = privateZoneData === null || privateZoneData === void 0 ? void 0 : privateZoneData.allActivities) === null || _a === void 0 ? void 0 : _a.length) || 0;

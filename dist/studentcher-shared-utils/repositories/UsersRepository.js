@@ -110,6 +110,21 @@ class UsersRepository extends EntityRepository_1.EntityRepository {
             throw new CustomError_1.CustomError("Personal zone not found.");
         return privateZone;
     }
+    async getVideoLength(updatedVideos) {
+        const selectPersonalZoneQuery = userManagementQueries.getVideoLength();
+        for (let i = 0; i < updatedVideos.length; i++) {
+            const video = updatedVideos[i];
+            const response = await this.pgClient.callDbCmd(selectPersonalZoneQuery, [video.fileName]);
+            updatedVideos[i].duration = response.rows[0].duration;
+        }
+        return updatedVideos;
+    }
+    async fixTheCurrentActivity(privateZoneData) {
+        const selectPersonalZoneQuery = userManagementQueries.getCurrentActivity();
+        const response = await this.pgClient.callDbCmd(selectPersonalZoneQuery, [privateZoneData.userId]);
+        privateZoneData.currentActivity = response.rows[0].current_activity;
+        return privateZoneData;
+    }
 }
 exports.UsersRepository = UsersRepository;
 //# sourceMappingURL=UsersRepository.js.map

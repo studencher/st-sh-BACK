@@ -124,4 +124,11 @@ export function getSelectIsVideoCompleted() {
   return ` select count(*)  from user_activity_video_status_history where activity_id = $1`;
   
 }
+
+export function getVideoLength(){
+  return 'select duration from eachvideoparameters where name = $1'
+}
  
+export function getCurrentActivity(){
+  return 'select  current_activity from user_current_activity where user_id = $1'
+}

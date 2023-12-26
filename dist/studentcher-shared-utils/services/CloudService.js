@@ -29,6 +29,7 @@ const Validations_1 = require("../helpers/Validations");
 const CustomError_1 = require("../models/CustomError");
 const ApiResponse_1 = require("../models/ApiResponse");
 const Constants_1 = require("../helpers/Constants");
+const UsersFunctions_1 = require("../functions/UsersFunctions");
 const process = __importStar(require("process"));
 class CloudService {
     constructor(cloudBucketAdapter) {
@@ -52,13 +53,19 @@ class CloudService {
                     return {
                         err: new CustomError_1.CustomError(`File extension ${fileExtension} is forbidden.`),
                     };
-                data.fileName = `${data.duration}-${data.fileName.split('.')[0]}_${CloudService.idGenerator()}.${fileExtension}`;
+                //    data.fileName = `${data.duration}-${
+                //      data.fileName.split('.')[0]
+                //    }_${CloudService.idGenerator()}.${fileExtension}`;
             }
             // const fileName = data.directory == null ? data.fileName : `${CloudService.directoriesIndex[data.directory]}/${data.fileName}`;
             const fileName = data.directory == null
                 ? data.fileName
                 : `${data.directory}/${data.fileName}`;
             const preSignedUrl = await this.cloudBucketAdapter.getSignedUrl(fileName, data.action);
+            if (preSignedUrl) { // save the length of uploaded video to 
+                let duration = data.duration;
+                (0, UsersFunctions_1.videoLengthtoDb)(CloudService, fileName, duration);
+            }
             return { response: new ApiResponse_1.ApiResponse(true, { preSignedUrl, fileName }) };
         }
         catch (err) {
