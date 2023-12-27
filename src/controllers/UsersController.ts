@@ -14,7 +14,7 @@ class UsersController {
             if (err != null) {
                 return next(err);
             }
-            res.status(200).send(response);
+          //  res.status(200).send(response);
         } catch (err) {
             next(err);
         }
@@ -108,7 +108,7 @@ class UsersController {
         const {err, response} = await this.usersService.getPersonalZone({userId: res.locals.userId})
         if(err != null)
             return next(err)
-        res.status(200).send(response);
+        //res.status(200).send(response);
     }
 
     postUserActivityVideoStatus = async (req: Request, res: Response, next: NextFunction) => {
@@ -136,7 +136,7 @@ class UsersController {
     fixUsersMissingDetails = async(req: Request, res: Response, next: NextFunction) => {
         let obj = {};
         const userDataString = req.query.userData as string;
-        obj = JSON.parse(userDataString);
+        obj = JSON.parse(userDataString); 
      //   const users = await this.usersService.fixUsersMissingDetails(obj)
         //{userId: 'admin@hyperactive.co.il', discordChannelId: '1159445172518662184', status: 'active'}
 

@@ -25,6 +25,9 @@ function fixIsVideoFinished(updatedVideos, isVideoCompleted, privateZoneData) {
     if (numOfFinishedVideosInCurrentActivity >= numOfVideosInCurrentActivity) {
         updatedVideos.map((video) => video.isCompleted = true);
     }
+    else {
+        updatedVideos.map((video) => video.isCompleted = false);
+    }
     return updatedVideos;
 }
 exports.fixIsVideoFinished = fixIsVideoFinished;

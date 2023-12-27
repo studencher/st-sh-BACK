@@ -56,6 +56,12 @@ export class UsersRepository extends EntityRepository{
         const selectPersonalZoneValues = [data.userId];
         const response = await this.pgClient.callDbCmd(selectPersonalZoneQuery, selectPersonalZoneValues);
         const privateZone = response.rows[0];
+
+            // #pr    somewhat the main sql query function didnt return all activities in correct order
+            // so i update the activities and the current activity
+        const realCurrentActivity = await this.pgClient.callDbCmd('select * from user_current_activity where user_id = $1',selectPersonalZoneValues)
+        privateZone.currentActivity = realCurrentActivity.rows[0].current_activity
+        privateZone.allActivities  = realCurrentActivity.rows[0].all_activities
         if(privateZone == null)
             throw new CustomError("Personal zone not found.");
         return privateZone as IUserPrivateZone;
