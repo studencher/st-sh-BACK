@@ -149,7 +149,7 @@ export class UsersService implements IUsersService {
     try {
       let privateZoneData: IUserPrivateZone = await this.userRepository.getPrivateZone(data);  // get all the data
       privateZoneData.allActivities.sort((a,b)=> a.index - b.index)                            // order the activities 1,2,3...
-      privateZoneData = await this.userRepository.fixTheCurrentActivity(privateZoneData)     // get the real current activity
+      // privateZoneData = await this.userRepository.fixTheCurrentActivity(privateZoneData)     // get the real current activity
       let currentActivityIndex = privateZoneData.currentActivity.index -1
       let _ = privateZoneData.allActivities.find((activity)=> activity.index == privateZoneData.currentActivity.index  )
       const allVideos = _.videos
