@@ -131,4 +131,4 @@ export function getVideoLength(){
  
 export function getCurrentActivity(){
   return 'select  current_activity from user_current_activity where user_id = $1'
-}
+} 

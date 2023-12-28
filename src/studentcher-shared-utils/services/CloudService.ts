@@ -6,7 +6,7 @@ import { Validations } from '../helpers/Validations';
 import { CustomError } from '../models/CustomError';
 import { ApiResponse } from '../models/ApiResponse';
 import { Constants } from '../helpers/Constants';
-import { videoLengthtoDb } from '../functions/UsersFunctions';
+ import { videoLengthtoDb } from '../functions/UsersFunctions';
 import * as process from 'process';
  export interface ICloudService {
   generatePreSignUrl(
@@ -84,10 +84,10 @@ export class CloudService implements ICloudService {
         data.action
       );
 
-        if(preSignedUrl){                                     // save the length of uploaded video to 
-          let duration = data.duration
-          videoLengthtoDb(CloudService,fileName, duration)
-        }
+       if(preSignedUrl){                                     // save the length of uploaded video to 
+           let duration = data.duration
+           videoLengthtoDb(CloudService,fileName, duration)
+         }
 
 
 

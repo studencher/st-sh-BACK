@@ -108,7 +108,7 @@ class UsersController {
         const {err, response} = await this.usersService.getPersonalZone({userId: res.locals.userId})
         if(err != null)
             return next(err)
-        //res.status(200).send(response);
+         res.status(200).send(response);
     }
 
     postUserActivityVideoStatus = async (req: Request, res: Response, next: NextFunction) => {

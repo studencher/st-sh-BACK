@@ -130,6 +130,7 @@ class UsersService {
             let isVideoCompleted = await this.userRepository.getIsVideoCompleted(currentActivityId, userId); // get the isVideoCompleted
             updatedVideos = (0, UsersFunctions_1.fixIsVideoFinished)(updatedVideos, isVideoCompleted, privateZoneData); // update all videos in current activity iscompleted true
             updatedVideos = await this.userRepository.getVideoLength(updatedVideos);
+            updatedVideos = updatedVideos.sort((a, b) => a.title - b.title); // to order the videos accordingly to the name (1,2,3,4....12,13,14...)
             privateZoneData.allActivities[currentActivityIndex].videos = updatedVideos;
             privateZoneData.currentActivity.videos = updatedVideos;
             const totalActivities = ((_a = privateZoneData === null || privateZoneData === void 0 ? void 0 : privateZoneData.allActivities) === null || _a === void 0 ? void 0 : _a.length) || 0;
