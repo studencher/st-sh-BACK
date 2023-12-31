@@ -155,8 +155,8 @@ export class UsersService implements IUsersService {
       const allVideos = _.videos
       const privateZoneDataAuxillary = await this.userRepository.getPrivateZoneAuxillary(privateZoneData.currentActivity.activityId) // get the the src_url of each video
       let updatedVideos = combineDataWithAuxillaryData(allVideos,privateZoneDataAuxillary)   // update the src url in the videos
-         let currentActivityId = privateZoneData.currentActivity.activityId
-         let userId = privateZoneData.userId
+      let currentActivityId = privateZoneData.currentActivity.activityId
+      let userId = privateZoneData.userId
         let  isVideoCompleted = await this.userRepository.getIsVideoCompleted(currentActivityId,userId) // get the isVideoCompleted
          updatedVideos = fixIsVideoFinished(updatedVideos, isVideoCompleted,privateZoneData )   // update all videos in current activity iscompleted true
           updatedVideos = await this.userRepository.getVideoLength(updatedVideos)
