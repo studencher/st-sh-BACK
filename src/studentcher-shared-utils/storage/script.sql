@@ -96,6 +96,7 @@ CREATE TABLE activity_videos(
     title               TEXT,
     file_name           TEXT,
     src_url             TEXT,
+    duration            TEXT,
     FOREIGN KEY (activity_id) REFERENCES activities (id)  ON DELETE CASCADE,
     PRIMARY KEY(activity_id, index),
     UNIQUE(activity_id, file_name)

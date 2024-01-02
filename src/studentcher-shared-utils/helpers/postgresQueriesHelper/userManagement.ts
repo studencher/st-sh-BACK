@@ -7,7 +7,7 @@ export function getSelectUserPermissionsQuery() {
 }
 
 export function getSelectUserDataQuery() {
-  return `select id, name, phone_number, date_of_birth, profile_picture_url as "phoneNumber", role_id as "roleId"
+  return `select id, name, phone_number, date_of_birth, profile_picture_url as "phoneNumber", role_id as "roleId", isonline
             from users where id = $1 ;`;
 }
 

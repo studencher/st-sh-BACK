@@ -31,6 +31,7 @@ export class User extends Entity implements IUser{
     }
 }
 export interface IUserDTO extends IEntity{
+    isonline: boolean;
     name: string,
     phoneNumber: string | undefined
     roleId: string | undefined

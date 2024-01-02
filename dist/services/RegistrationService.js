@@ -20,8 +20,26 @@ class RegistrationService {
                 return { err: new studentcher_shared_utils_1.CustomError("Login Failed") };
             const token = this.authenticationService.generateControlPanelToken(userId);
             const user = await this.userRepository.findOne({ userId });
-            const userPermissions = await this.rolesRepository.findUserPermissions({ userId });
-            return { response: new studentcher_shared_utils_1.ApiResponse(true, { token, user, userPermissions }) };
+            if (user.isonline != true) { // still not online, so can be logged in
+                let isonline = user.isonline;
+                await this.userRepository.setOnline({ userId });
+                const userPermissions = await this.rolesRepository.findUserPermissions({ userId });
+                return { response: new studentcher_shared_utils_1.ApiResponse(true, { token, user, userPermissions, isonline }) };
+            }
+            else if (user.isonline == true) { // already online
+                let isonline = user.isonline;
+                return { response: new studentcher_shared_utils_1.ApiResponse(false, { isonline }) };
+            }
+        }
+        catch (err) {
+            return { err };
+        }
+    }
+    async logoutHandler(userId) {
+        try {
+            if (userId == null)
+                return { err: new studentcher_shared_utils_1.CustomError("Logout Failed") };
+            await this.userRepository.setOffline({ userId });
         }
         catch (err) {
             return { err };

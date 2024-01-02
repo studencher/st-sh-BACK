@@ -15,6 +15,7 @@ router.post("/login", authenticationService.authenticate, userActivityTracker, a
 });
 
 router.post("/logout", authenticationService.verify, userActivityTracker, async function (req: Request, res: Response, _next: Function){
+    await registrationService.logoutHandler(res.locals.userId);
     console.log('logout router')
     return res.status(200).send();
 });

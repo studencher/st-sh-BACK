@@ -16,6 +16,7 @@ router.post("/login", AuthenticationService_1.default.authenticate, PostgresAdap
     return res.status(200).send(response);
 });
 router.post("/logout", AuthenticationService_1.default.verify, PostgresAdapter_1.userActivityTracker, async function (req, res, _next) {
+    await RegistrationService_1.default.logoutHandler(res.locals.userId);
     console.log('logout router');
     return res.status(200).send();
 });
