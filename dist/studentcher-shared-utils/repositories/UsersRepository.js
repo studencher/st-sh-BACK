@@ -83,11 +83,11 @@ class UsersRepository extends EntityRepository_1.EntityRepository {
     }
     async setOnline(data) {
         const values = [data.userId];
-        await this.pgClient.callDbCmd('update users set isonline = true where id = $1', values);
+        await this.pgClient.callDbCmd('update users set  isonline = true where id = $1', values);
     }
     async setOffline(data) {
         const values = [data.userId];
-        await this.pgClient.callDbCmd('update users set isonline = false where id = $1', values);
+        await this.pgClient.callDbCmd('update users set  isonline = false where id = $1', values);
     }
     async addUserActivity(data) {
         const insertUserActivity = userManagementQueries.getInsertUserActivityQuery();
